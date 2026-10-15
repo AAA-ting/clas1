@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alpha 的技术博客 | 虚拟现实 · 小游戏开发 · 工业数字孪生 · 技术培训</title>
+<meta name="description" content="Alpha 的技术博客专注虚拟现实（VR）开发制作、小游戏开发、小程序、工业数字孪生、网站开发与虚拟现实培训，服务广告、影视、高校、企业、军工与银行客户，提供从方案、开发到培训的一站式空间计算技术服务。">
+<meta name="keywords" content="小游戏,虚拟现实,虚拟现实培训,高斯泼溅,数字孪生,VR开发,小程序开发,网站开发">
+<meta property="og:title" content="Alpha 的技术博客 | 虚拟现实 · 小游戏 · 数字孪生">
+<meta property="og:description" content="用空间计算与实时互动，把想象做成可落地的产品。虚拟现实、小游戏、数字孪生、网站开发与培训一站式交付。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232DE2FF'/%3E%3Cstop offset='1' stop-color='%238B7CFF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ctext x='32' y='44' font-size='34' font-weight='700' text-anchor='middle' fill='%23070B14' font-family='Arial'%3Eα%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* ============ 设计系统：空间计算视窗 ============ */
+:root{
+  --ink:#070B14;          /* 最深底色 */
+  --navy:#0C1322;         /* 面板底色 */
+  --panel:#101A2E;        /* 卡片底色 */
+  --line:rgba(151,163,204,.16);
+  --text:#E8EDF7;
+  --muted:#98A4BE;
+  --cyan:#2DE2FF;
+  --violet:#8B7CFF;
+  --grad:linear-gradient(110deg,#2DE2FF 0%,#8B7CFF 100%);
+  --radius:16px;
+  --font-cn:"Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-en:"Space Grotesk","Noto Sans SC",system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--text);
+  font-family:var(--font-cn);
+  font-size:15px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+ul{list-style:none}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:4px}
+::selection{background:rgba(45,226,255,.25)}
+
+/* 背景层：星点网格 + 双光晕（装饰层，不挡内容） */
+.bg-scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-scene::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    radial-gradient(rgba(151,163,204,.14) 1px,transparent 1px);
+  background-size:26px 26px;
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 30%,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 30%,transparent 75%);
+}
+.bg-scene .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.22}
+.blob-c{width:520px;height:520px;background:#2DE2FF;top:-180px;left:-120px}
+.blob-v{width:440px;height:440px;background:#8B7CFF;top:120px;right:-160px}
+
+/* 布局容器 */
+.wrap{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 20px}
+
+/* 按钮 */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:46px;padding:0 22px;border-radius:12px;
+  font-size:15px;font-weight:700;letter-spacing:.02em;
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
+}
+.btn-solid{background:var(--grad);color:#060B16;box-shadow:0 8px 26px rgba(45,226,255,.22)}
+.btn-solid:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(139,124,255,.32)}
+.btn-ghost{border:1px solid var(--line);color:var(--text);background:rgba(255,255,255,.02)}
+.btn-ghost:hover{border-color:rgba(45,226,255,.55);color:var(--cyan);transform:translateY(-2px)}
+.btn .arr{transition:transform .18s ease}
+.btn:hover .arr{transform:translateX(3px)}
+
+/* 页眉 */
+.site-head{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(7,11,20,.72);
+  border-bottom:1px solid var(--line);
+}
+.head-in{display:flex;align-items:center;gap:18px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:17px;letter-spacing:.01em}
+.logo-mark{
+  width:34px;height:34px;border-radius:9px;flex:none;
+  background:var(--grad);display:grid;place-items:center;
+  color:#060B16;font-family:var(--font-en);font-size:20px;font-weight:700;
+}
+.logo .en{font-family:var(--font-en);font-size:13px;font-weight:500;color:var(--muted);letter-spacing:.14em}
+.main-nav{display:flex;gap:4px;margin-left:auto}
+.main-nav a{
+  padding:8px 13px;border-radius:9px;font-size:14.5px;color:var(--muted);
+  transition:color .15s ease,background .15s ease;
+}
+.main-nav a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.main-nav a.on{color:var(--cyan);background:rgba(45,226,255,.08)}
+.head-cta{flex:none}
+.head-cta .btn{min-height:40px;padding:0 18px;font-size:14px}
+.menu-btn{display:none;width:42px;height:42px;border-radius:10px;border:1px solid var(--line);place-items:center}
+.menu-btn svg{width:20px;height:20px;stroke:var(--text)}
+
+/* 移动端抽屉菜单 */
+.drawer{
+  position:fixed;inset:0;z-index:60;visibility:hidden;opacity:0;overflow:hidden;transition:opacity .2s ease,visibility .2s ease;
+}
+.drawer.open{visibility:visible;opacity:1}
+.drawer-mask{position:absolute;inset:0;background:rgba(4,7,13,.7)}
+.drawer-panel{
+  position:absolute;right:0;top:0;bottom:0;width:min(320px,84vw);
+  background:var(--navy);border-left:1px solid var(--line);
+  padding:22px;display:flex;flex-direction:column;gap:6px;
+  transform:translateX(100%);transition:transform .24s ease;
+}
+.drawer.open .drawer-panel{transform:none}
+.drawer-panel a{padding:13px 10px;border-radius:10px;font-size:16px;color:var(--muted)}
+.drawer-panel a:hover{background:rgba(255,255,255,.05);color:var(--text)}
+.drawer-panel .btn{margin-top:14px}
+.drawer-close{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:9px;border:1px solid var(--line);display:grid;place-items:center}
+
+/* 视图容器 */
+.view{display:none}
+.view.on{display:block;animation:viewIn .32s ease}
+@keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* 通用区块 */
+.sec{padding:70px 0}
+.sec-head{max-width:720px;margin-bottom:38px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:13px;color:var(--muted);margin-bottom:12px;
+}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--grad);border-radius:2px}
+.sec-head h2{font-size:clamp(24px,4.6vw,34px);font-weight:900;line-height:1.25;letter-spacing:-.01em}
+.sec-head .sub{color:var(--muted);margin-top:12px;font-size:15px;max-width:60ch}
+
+/* 视窗卡片：贯穿全站的视觉语言 */
+.win{
+  position:relative;border:1px solid var(--line);border-radius:var(--radius);
+  background:linear-gradient(160deg,rgba(255,255,255,.035),rgba(255,255,255,.008));
+  overflow:hidden;
+}
+.win::before,.win::after{
+  content:"";position:absolute;width:16px;height:16px;border:2px solid rgba(45,226,255,.0);transition:border-color .25s ease;
+}
+.win::before{top:9px;left:9px;border-right:none;border-bottom:none;border-top-left-radius:8px}
+.win::after{bottom:9px;right:9px;border-left:none;border-top:none;border-bottom-right-radius:8px}
+.win:hover{border-color:rgba(45,226,255,.4);box-shadow:0 0 0 1px rgba(45,226,255,.08),0 14px 44px rgba(6,10,22,.6)}
+.win:hover::before,.win:hover::after{border-color:rgba(45,226,255,.7)}
+
+/* 滚动揭示 */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+.rv.in{opacity:1;transform:none}
+
+/* ===== 首页 ===== */
+.hero{padding:64px 20px 40px}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:34px;align-items:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 13px;border-radius:99px;border:1px solid rgba(45,226,255,.35);
+  background:rgba(45,226,255,.07);font-size:13px;color:#BFEBF5;margin-bottom:18px;
+}
+.hero-badge i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.hero h1{font-size:clamp(30px,6.4vw,52px);font-weight:900;line-height:1.18;letter-spacing:-.02em}
+.hero h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{color:var(--muted);margin-top:18px;font-size:16px;max-width:54ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.hero-stats{display:flex;flex-wrap:wrap;gap:0;margin-top:40px;border-top:1px solid var(--line);padding-top:22px}
+.hstat{padding:0 26px;border-right:1px solid var(--line)}
+.hstat:first-child{padding-left:0}
+.hstat:last-child{border-right:none}
+.hstat .n{font-family:var(--font-en);font-size:30px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hstat .l{font-size:13px;color:var(--muted);margin-top:2px}
+.hero-visual{position:relative}
+.hero-frame{aspect-ratio:4/3;border-radius:18px;border:1px solid var(--line);overflow:hidden;background:var(--navy)}
+.hero-frame img{width:100%;height:100%;object-fit:cover}
+.hero-frame::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 60px rgba(7,11,20,.65);border-radius:18px}
+.float-chip{
+  position:absolute;z-index:2;display:flex;align-items:center;gap:8px;
+  padding:9px 14px;border-radius:12px;font-size:13px;font-weight:700;
+  background:rgba(12,19,34,.88);border:1px solid rgba(45,226,255,.4);
+  backdrop-filter:blur(8px);box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+.float-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 9px var(--cyan)}
+.fc-1{top:-14px;right:16px}
+.fc-2{bottom:-16px;left:16px;border-color:rgba(139,124,255,.45)}
+.fc-2 .dot{background:var(--violet);box-shadow:0 0 9px var(--violet)}
+
+/* 信任条 */
+.trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0}
+.trust-in{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px}
+.trust-tip{font-size:13px;color:var(--muted);width:100%}
+.chip{
+  padding:7px 16px;border-radius:99px;border:1px solid var(--line);
+  font-size:14px;color:var(--text);background:rgba(255,255,255,.03);
+}
+
+/* 三优势 */
+.adv-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.adv{padding:26px 22px}
+.adv .ic{
+  width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+  background:rgba(45,226,255,.09);border:1px solid rgba(45,226,255,.25);margin-bottom:16px;
+}
+.adv .ic svg{width:22px;height:22px;stroke:var(--cyan)}
+.adv h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.adv p{color:var(--muted);font-size:14px}
+
+/* 服务预览 */
+.srv-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.srv{display:flex;flex-direction:column;gap:14px;padding:24px 22px}
+.srv-top{display:flex;align-items:center;gap:14px}
+.srv .ic{width:46px;height:46px;flex:none;border-radius:12px;display:grid;place-items:center;background:rgba(139,124,255,.09);border:1px solid rgba(139,124,255,.25)}
+.srv .ic svg{width:23px;height:23px;stroke:var(--violet)}
+.srv h3{font-size:17px;font-weight:700}
+.srv p{color:var(--muted);font-size:14px;flex:1}
+.srv .more{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--cyan)}
+.srv .more svg{width:15px;height:15px;stroke:var(--cyan);transition:transform .18s ease}
+.srv:hover .more svg{transform:translateX(3px)}
+
+/* 客户评价 */
+.quote-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.quote{padding:24px 22px;display:flex;flex-direction:column;gap:14px}
+.quote .stars{display:flex;gap:3px;color:var(--cyan)}
+.stars svg{width:14px;height:14px;flex:none}
+.quote p{color:#C6CFE2;font-size:14.5px;flex:1}
+.quote .who{display:flex;align-items:center;gap:11px}
+.quote .ava{width:40px;height:40px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-weight:900;color:#060B16;font-size:15px;flex:none}
+.quote .nm{font-size:14px;font-weight:700}
+.quote .rl{font-size:12.5px;color:var(--muted)}
+
+/* 关于预览 */
+.about-preview{display:grid;grid-template-columns:1fr;gap:26px;align-items:center}
+.ap-img{border-radius:18px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/10}
+.ap-img img{width:100%;height:100%;object-fit:cover}
+.ap-txt h3{font-size:clamp(20px,3.8vw,26px);font-weight:900;line-height:1.35;margin-bottom:14px}
+.ap-txt p{color:var(--muted);margin-bottom:12px;font-size:14.5px}
+.ap-txt .btn{margin-top:10px}
+
+/* 最终 CTA */
+.cta-band{
+  border-radius:20px;border:1px solid rgba(45,226,255,.25);
+  background:linear-gradient(150deg,rgba(45,226,255,.1),rgba(139,124,255,.12)),var(--navy);
+  padding:44px 26px;text-align:center;
+}
+.cta-band h2{font-size:clamp(22px,4.4vw,32px);font-weight:900;line-height:1.3}
+.cta-band p{color:var(--muted);margin:12px auto 24px;max-width:50ch;font-size:15px}
+.cta-band .hero-cta{justify-content:center;margin-top:0}
+
+/* ===== 页首（内页） ===== */
+.page-hero{padding:58px 20px 30px}
+.page-hero .crumb{font-size:13px;color:var(--muted);margin-bottom:14px}
+.page-hero .crumb a:hover{color:var(--cyan)}
+.page-hero h1{font-size:clamp(28px,5.6vw,44px);font-weight:900;line-height:1.2;letter-spacing:-.02em}
+.page-hero h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.page-hero .sub{color:var(--muted);margin-top:14px;max-width:62ch;font-size:15.5px}
+
+/* ===== 关于 ===== */
+.story{display:grid;grid-template-columns:1fr;gap:26px;align-items:center}
+.story-img{border-radius:18px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/10}
+.story-img img{width:100%;height:100%;object-fit:cover}
+.story-txt p{color:var(--muted);margin-bottom:12px;font-size:14.5px}
+.story-txt p b{color:var(--text);font-weight:700}
+.mission{
+  border-radius:18px;border:1px solid rgba(139,124,255,.3);
+  background:linear-gradient(150deg,rgba(139,124,255,.1),rgba(45,226,255,.07));
+  padding:26px 22px;
+}
+.mission h3{font-size:18px;font-weight:900;margin-bottom:10px;color:#DCD4FF}
+.mission p{color:#C2C9DD;font-size:15px}
+.diff-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.diff{padding:22px 20px;display:flex;gap:16px;align-items:flex-start}
+.diff .num{
+  flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;
+  font-family:var(--font-en);font-weight:700;font-size:15px;color:#060B16;background:var(--grad);
+}
+.diff h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.diff p{color:var(--muted);font-size:13.5px}
+/* 时间轴（grid 三列，像素对齐） */
+.tl{display:grid;grid-template-columns:1fr;gap:0}
+.tl-item{position:relative;padding:0 0 26px 26px;border-left:1px solid var(--line);margin-left:9px}
+.tl-item::before{
+  content:"";position:absolute;left:-5px;top:4px;width:9px;height:9px;border-radius:50%;
+  background:var(--ink);border:2px solid var(--cyan);box-shadow:0 0 0 3px rgba(45,226,255,.15);
+}
+.tl-item:last-child{border-left-color:transparent}
+.tl-time{font-family:var(--font-en);font-size:13px;font-weight:700;color:var(--cyan)}
+.tl-item h4{font-size:16px;font-weight:700;margin:4px 0 6px}
+.tl-item p{color:var(--muted);font-size:13.5px}
+
+/* ===== 服务 ===== */
+.svc-detail{display:grid;grid-template-columns:1fr;gap:16px}
+.svc{padding:26px 22px}
+.svc .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:rgba(45,226,255,.09);border:1px solid rgba(45,226,255,.25);margin-bottom:14px}
+.svc .ic svg{width:23px;height:23px;stroke:var(--cyan)}
+.svc h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.svc p{color:var(--muted);font-size:14px;margin-bottom:12px}
+.svc .tags{display:flex;flex-wrap:wrap;gap:8px}
+.svc .tags span{padding:4px 11px;border-radius:99px;border:1px solid var(--line);font-size:12.5px;color:#C6CFE2;background:rgba(255,255,255,.03)}
+/* 流程 */
+.steps{display:grid;grid-template-columns:1fr;gap:0;counter-reset:step}
+.step{position:relative;padding:0 0 22px 26px;border-left:1px solid var(--line);margin-left:13px}
+.step::before{
+  counter-increment:step;content:"0" counter(step);
+  position:absolute;left:-24px;top:0;width:47px;height:28px;border-radius:9px;
+  display:grid;place-items:center;font-family:var(--font-en);font-size:13px;font-weight:700;
+  color:#060B16;background:var(--grad);
+}
+.step:last-child{border-left-color:transparent}
+.step h4{font-size:16px;font-weight:700;margin-bottom:6px}
+.step p{color:var(--muted);font-size:13.5px}
+/* FAQ */
+.faq{display:grid;grid-template-columns:1fr;gap:10px}
+.faq-item{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02);overflow:hidden}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 18px;font-size:15px;font-weight:700;text-align:left;color:var(--text)}
+.faq-q svg{width:18px;height:18px;stroke:var(--cyan);flex:none;transition:transform .2s ease}
+.faq-item.open .faq-q svg{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .28s ease}
+.faq-a p{padding:0 18px 16px;color:var(--muted);font-size:14px}
+
+/* ===== 作品集 ===== */
+.filter-bar{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:24px}
+.fchip{padding:8px 17px;border-radius:99px;border:1px solid var(--line);font-size:14px;color:var(--muted);transition:all .16s ease;min-height:44px}
+.fchip:hover{color:var(--text);border-color:rgba(45,226,255,.5)}
+.fchip.on{background:var(--grad);color:#060B16;border-color:transparent;font-weight:700}
+.work-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.work{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--panel);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.work:hover{transform:translateY(-4px);border-color:rgba(45,226,255,.4);box-shadow:0 16px 40px rgba(6,10,22,.55)}
+.work-img{aspect-ratio:3/2;overflow:hidden;position:relative}
+.work-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.work:hover .work-img img{transform:scale(1.05)}
+.work-img .tag{
+  position:absolute;top:12px;left:12px;padding:4px 11px;border-radius:99px;
+  font-size:12px;font-weight:700;background:rgba(7,11,20,.78);border:1px solid rgba(45,226,255,.4);color:var(--cyan);
+  backdrop-filter:blur(6px);
+}
+.work-bd{padding:16px 16px 18px}
+.work-bd h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.work-bd p{color:var(--muted);font-size:13.5px}
+.work-bd .meta{display:flex;gap:14px;margin-top:12px;font-size:12.5px;color:#7E8AA6;font-family:var(--font-en)}
+
+/* ===== 联系 ===== */
+.contact-grid{display:grid;grid-template-columns:1fr;gap:22px}
+.cform{padding:26px 22px}
+.form-row{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
+.field label{display:block;font-size:13.5px;color:#C6CFE2;margin-bottom:7px;font-weight:500}
+.field input,.field textarea{
+  width:100%;min-height:46px;padding:11px 14px;border-radius:11px;
+  border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);
+  font-family:inherit;font-size:16px;transition:border-color .15s ease;
+}
+.field textarea{min-height:120px;resize:vertical}
+.field input:focus,.field textarea:focus{outline:none;border-color:rgba(45,226,255,.6)}
+.cform .btn{width:100%;margin-top:6px}
+.contact-info{display:grid;grid-template-columns:1fr;gap:12px}
+.cinfo{display:flex;gap:14px;align-items:flex-start;padding:18px 18px}
+.cinfo .ic{width:40px;height:40px;flex:none;border-radius:11px;display:grid;place-items:center;background:rgba(139,124,255,.09);border:1px solid rgba(139,124,255,.25)}
+.cinfo .ic svg{width:20px;height:20px;stroke:var(--violet)}
+.cinfo h4{font-size:14.5px;font-weight:700;margin-bottom:3px}
+.cinfo p{color:var(--muted);font-size:13.5px;line-height:1.6}
+.map-wrap{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);margin-top:22px;background:linear-gradient(150deg,rgba(45,226,255,.06),rgba(139,124,255,.08))}
+.map-wrap iframe{display:block;width:100%;height:280px;border:0;filter:grayscale(.15) invert(.9) hue-rotate(200deg) saturate(.75)}
+.map-link{border-top:1px solid var(--line);padding:11px 18px;text-align:right}
+.map-link a{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--cyan)}
+.map-link a:hover{text-decoration:underline}
+.map-link svg{width:15px;height:15px;stroke:var(--cyan)}
+.socials{display:flex;gap:12px;margin-top:22px}
+.socials a{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;transition:all .16s ease;background:rgba(255,255,255,.02)}
+.socials a:hover{border-color:rgba(45,226,255,.55);transform:translateY(-2px)}
+.socials svg{width:20px;height:20px;stroke:var(--text)}
+
+/* 页脚 */
+.site-foot{border-top:1px solid var(--line);padding:40px 0 28px;margin-top:20px}
+.foot-grid{display:grid;grid-template-columns:1fr;gap:26px}
+.foot-brand .logo{margin-bottom:12px}
+.foot-brand p{color:var(--muted);font-size:13.5px;max-width:36ch}
+.foot-col h4{font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text)}
+.foot-col a{display:block;color:var(--muted);font-size:13.5px;padding:4px 0;transition:color .15s ease}
+.foot-col a:hover{color:var(--cyan)}
+.foot-bottom{border-top:1px solid var(--line);margin-top:28px;padding-top:18px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;color:#7E8AA6;font-size:12.5px}
+
+/* toast */
+.toast{
+  position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);
+  background:var(--navy);border:1px solid rgba(45,226,255,.5);color:var(--text);
+  padding:13px 22px;border-radius:12px;font-size:14px;font-weight:700;
+  opacity:0;visibility:hidden;transition:all .25s ease;z-index:100;
+  box-shadow:0 14px 40px rgba(0,0,0,.5);
+}
+.toast.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+
+/* ===== 响应式：桌面 ===== */
+@media (min-width:768px){
+  body{font-size:15.5px}
+  .sec{padding:88px 0}
+  .hero{padding:86px 20px 54px}
+  .hero-grid{grid-template-columns:1.05fr .95fr;gap:48px}
+  .hstat .n{font-size:34px}
+  .adv-grid{grid-template-columns:repeat(3,1fr)}
+  .srv-grid{grid-template-columns:repeat(3,1fr)}
+  .quote-grid{grid-template-columns:repeat(3,1fr)}
+  .about-preview{grid-template-columns:1fr 1fr;gap:48px}
+  .story{grid-template-columns:1fr 1fr;gap:48px}
+  .diff-grid{grid-template-columns:repeat(2,1fr)}
+  .tl{grid-template-columns:repeat(3,1fr);gap:0 40px}
+  .tl-item{margin-left:0}
+  .svc-detail{grid-template-columns:repeat(3,1fr)}
+  .steps{grid-template-columns:repeat(5,1fr);gap:0 26px}
+  .work-grid{grid-template-columns:repeat(3,1fr)}
+  .contact-grid{grid-template-columns:1fr 340px;gap:26px}
+  .contact-info{grid-template-columns:repeat(2,1fr)}
+  .form-row{grid-template-columns:1fr 1fr}
+  .foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr}
+  .trust-tip{width:auto}
+}
+@media (min-width:960px){
+  .main-nav{display:flex}
+  .menu-btn{display:none}
+  .head-cta{display:inline-flex}
+}
+@media (max-width:959px){
+  .main-nav{display:none}
+  .menu-btn{display:grid}
+  .head-cta{display:none}
+}
+/* 移动端时间轴改纵向文档流 */
+@media (max-width:767px){
+  .tl-item,.step{padding-left:26px;margin-left:9px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div class="bg-scene" aria-hidden="true"><span class="blob blob-c"></span><span class="blob blob-v"></span></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="ic-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l2.9 6.2 6.6.8-4.9 4.6 1.3 6.6L12 17.8l-5.9 2.9 1.3-6.6L2.5 9.5l6.6-.8L12 2.5z"/></symbol>
+</svg>
+
+<!-- ===== 页眉 ===== -->
+<header class="site-head">
+  <div class="wrap head-in">
+    <a class="logo" href="#/home" aria-label="Alpha 技术博客首页">
+      <span class="logo-mark">α</span>
+      <span>Alpha 的技术博客<span class="en" style="display:block;margin-top:1px">SPATIAL STUDIO</span></span>
+    </a>
+    <nav class="main-nav" aria-label="主导航">
+      <a href="#/home" data-nav="home">首页</a>
+      <a href="#/about" data-nav="about">关于我们</a>
+      <a href="#/services" data-nav="services">服务</a>
+      <a href="#/works" data-nav="works">作品</a>
+      <a href="#/contact" data-nav="contact">联系我们</a>
+    </nav>
+    <div class="head-cta"><a class="btn btn-solid" href="#/contact">预约咨询</a></div>
+    <button class="menu-btn" id="menuBtn" aria-label="打开菜单" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- 移动端抽屉 -->
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="移动端菜单">
+  <div class="drawer-mask" id="drawerMask"></div>
+  <nav class="drawer-panel" aria-label="移动端导航">
+    <button class="drawer-close" id="drawerClose" aria-label="关闭菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" width="18" height="18"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <a href="#/home" data-nav="home">首页</a>
+    <a href="#/about" data-nav="about">关于我们</a>
+    <a href="#/services" data-nav="services">服务</a>
+    <a href="#/works" data-nav="works">作品</a>
+    <a href="#/contact" data-nav="contact">联系我们</a>
+    <a class="btn btn-solid" href="#/contact">预约免费咨询</a>
+  </nav>
+</div>
+
+<main id="main">
+
+<!-- ============ 视图：首页 ============ -->
+<section class="view on" id="view-home" data-title="Alpha 的技术博客 | 虚拟现实 · 小游戏开发 · 工业数字孪生 · 技术培训" data-desc="Alpha 的技术博客专注虚拟现实（VR）开发制作、小游戏开发、小程序、工业数字孪生、网站开发与虚拟现实培训，服务广告、影视、高校、企业、军工与银行客户，提供从方案、开发到培训的一站式空间计算技术服务。">
+
+  <div class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <span class="hero-badge"><i></i>虚拟现实 · 小游戏 · 数字孪生 · 高斯泼溅</span>
+        <h1>用空间计算与实时互动，<span class="grad">把想象做成可落地的产品</span></h1>
+        <p class="hero-sub">面向广告、影视、高校与企业的虚拟现实（VR）与小游戏开发团队——从创意方案、引擎开发到上线运营与技术培训，一站式交付。</p>
+        <div class="hero-cta">
+          <a class="btn btn-solid" href="#/contact">预约免费咨询<span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#/works">查看作品<span class="arr">→</span></a>
+        </div>
+        <div class="hero-stats">
+          <div class="hstat"><div class="n">60+</div><div class="l">项目交付</div></div>
+          <div class="hstat"><div class="n">12+</div><div class="l">行业客户</div></div>
+          <div class="hstat"><div class="n">8</div><div class="l">年技术积累</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-frame"><img src="assets/hero-vr.jpg" alt="戴上虚拟现实头显的用户正在体验空间交互应用" width="1400" height="1050" loading="eager"></div>
+        <span class="float-chip fc-1"><span class="dot"></span>实时渲染 · 60 FPS</span>
+        <span class="float-chip fc-2"><span class="dot"></span>高斯泼溅 · 三维场景重建</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust">
+    <div class="wrap trust-in">
+      <span class="trust-tip">服务对象覆盖六大行业，军工客户合作遵循保密合规流程</span>
+      <span class="chip">广告</span><span class="chip">影视</span><span class="chip">高校</span>
+      <span class="chip">企业</span><span class="chip">军工</span><span class="chip">银行</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">核心能力</span>
+        <h2>为什么选择 Alpha</h2>
+        <p class="sub">技术只是起点，我们把创意、工程与行业理解放在同一条流水线上。</p>
+      </div>
+      <div class="adv-grid">
+        <article class="win adv rv">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></div>
+          <h3>全栈交付能力</h3>
+          <p>从创意策划、三维建模、引擎开发到测试上线，一个团队闭环完成，不甩包、不拆单，对最终效果负责。</p>
+        </article>
+        <article class="win adv rv">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2.5-7.5L3 11z"/><path d="M10.5 13.5L20 4"/></svg></div>
+          <h3>行业落地经验</h3>
+          <p>在广告、影视、高校、军工与银行多个行业完成交付，听得懂客户语言，也守得住行业边界与合规要求。</p>
+        </article>
+        <article class="win adv rv">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M3 9h18M9 21V9"/><circle cx="14.5" cy="14.5" r="1.6"/></svg></div>
+          <h3>工程化品质</h3>
+          <p>性能优化、多端适配、数据与保密合规（军工项目按保密流程执行），交付的不是 demo，而是能长期运行的产品。</p>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">服务一览</span>
+        <h2>六大服务，覆盖完整数字产品链路</h2>
+        <p class="sub">每一项服务都可以独立交付，也可以组合成一个完整的项目。</p>
+      </div>
+      <div class="srv-grid">
+        <a class="win srv rv" href="#/services">
+          <div class="srv-top">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="3"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M9 13l2 2 4-4"/></svg></span>
+            <h3>虚拟现实开发</h3>
+          </div>
+          <p>VR 应用与沉浸式体验制作，适配主流头显，空间交互与实时渲染。</p>
+          <span class="more">了解详情<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="win srv rv" href="#/services">
+          <div class="srv-top">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h4l2-7 4 14 2-7h2"/></svg></span>
+            <h3>小游戏开发</h3>
+          </div>
+          <p>微信小游戏、H5 小游戏与休闲游戏，从玩法原型到上线运营。</p>
+          <span class="more">了解详情<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="win srv rv" href="#/services">
+          <div class="srv-top">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="3"/><path d="M11 18h2"/></svg></span>
+            <h3>小程序开发</h3>
+          </div>
+          <p>微信与抖音小程序，电商、工具与企业服务类应用快速上线。</p>
+          <span class="more">了解详情<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="win srv rv" href="#/services">
+          <div class="srv-top">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/><path d="M12 3v4.5M12 16.5V21M3 12h4.5M16.5 12H21"/></svg></span>
+            <h3>工业数字孪生</h3>
+          </div>
+          <p>设备与产线三维可视化、数据接入与园区级孪生平台建设。</p>
+          <span class="more">了解详情<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="win srv rv" href="#/services">
+          <div class="srv-top">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M2.5 9h19M2.5 15h19M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/></svg></span>
+            <h3>网站开发</h3>
+          </div>
+          <p>企业官网、品牌站与营销页，响应式布局与 SEO 基础优化。</p>
+          <span class="more">了解详情<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="win srv rv" href="#/services">
+          <div class="srv-top">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a9 9 0 0116-2.5"/><path d="M20 10a9 9 0 01-16 2.5"/><path d="M12 11v6M9 14l3 3 3-3"/></svg></span>
+            <h3>技术培训</h3>
+          </div>
+          <p>VR 与游戏开发入门进阶、企业内训、高校课程合作，含高斯泼溅等前沿分享。</p>
+          <span class="more">了解详情<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">客户评价</span>
+        <h2>他们选择了 Alpha</h2>
+        <p class="sub">从创意提案到产品上线，客户与我们一起走过完整周期。</p>
+      </div>
+      <div class="quote-grid">
+        <article class="win quote rv">
+          <div class="stars" aria-label="五星好评"><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg></div>
+          <p>“从概念到 VR 展厅上线只用了五周，交互手感远超我们预期，现场演示效果直接促成了两个新客户。”</p>
+          <div class="who"><span class="ava">陈</span><div><div class="nm">陈总监</div><div class="rl">广告公司 · 创意总监</div></div></div>
+        </article>
+        <article class="win quote rv">
+          <div class="stars" aria-label="五星好评"><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg></div>
+          <p>“虚拟实验室小程序一学期就服务了三千多名学生，Alpha 的培训让我们的老师也能独立维护内容。”</p>
+          <div class="who"><span class="ava">李</span><div><div class="nm">李老师</div><div class="rl">高校 · 实验室负责人</div></div></div>
+        </article>
+        <article class="win quote rv">
+          <div class="stars" aria-label="五星好评"><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg><svg viewBox="0 0 24 24"><use href="#ic-star" xlink:href="#ic-star"/></svg></div>
+          <p>“数字孪生平台把分行网点的运营数据接进了三维场景，管理层一眼就能看懂，汇报效率提升明显。”</p>
+          <div class="who"><span class="ava">周</span><div><div class="nm">周经理</div><div class="rl">银行 · 数字运营部</div></div></div>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="about-preview rv">
+        <div class="ap-img"><img src="assets/about-team.jpg" alt="Alpha 团队在办公室共同讨论项目方案" width="1000" height="625" loading="lazy"></div>
+        <div class="ap-txt">
+          <span class="eyebrow">关于我们</span>
+          <h3>一支从引擎研发走来的空间计算团队</h3>
+          <p>Alpha 起步于游戏引擎研发，八年来服务广告、影视、高校、企业与军工客户，把实时渲染、空间交互与三维重建技术带进真实业务。</p>
+          <p>我们相信：好的技术产品，既要跑得稳，也要看得懂。</p>
+          <a class="btn btn-ghost" href="#/about">了解更多<span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta-band rv">
+        <h2>准备好开始您的下一个项目了吗？</h2>
+        <p>留下您的需求，我们会在一个工作日内联系您，提供初步方案与报价参考。</p>
+        <div class="hero-cta">
+          <a class="btn btn-solid" href="#/contact">预约免费咨询<span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#/works">先看作品<span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 视图：关于我们 ============ -->
+<section class="view" id="view-about" data-title="关于我们 | Alpha 的技术博客" data-desc="了解 Alpha 技术团队：从游戏引擎研发起步，八年来服务广告、影视、高校、企业与军工客户，专注虚拟现实、小游戏与数字孪生技术落地。">
+
+  <div class="wrap page-hero">
+    <div class="crumb"><a href="#/home">首页</a> / 关于我们</div>
+    <h1>关于 <span class="grad">Alpha</span></h1>
+    <p class="sub">一支从引擎研发走来的空间计算团队，把虚拟现实、小游戏与数字孪生技术带进真实业务。</p>
+  </div>
+
+  <div class="sec" style="padding-top:10px">
+    <div class="wrap">
+      <div class="story rv">
+        <div class="story-img"><img src="assets/srv-vr.jpg" alt="团队成员调试虚拟现实头显设备" width="900" height="675" loading="lazy"></div>
+        <div class="story-txt">
+          <span class="eyebrow">品牌故事</span>
+          <h3 style="font-size:clamp(20px,3.8vw,26px);font-weight:900;margin-bottom:14px">始于引擎，长于落地</h3>
+          <p>Alpha 成立于 <b>2018 年</b>，最早是一支做游戏引擎渲染与性能优化的技术小组。随着虚拟现实硬件成熟，我们把实时渲染能力迁移到 VR 体验制作，陆续服务广告与影视客户。</p>
+          <p>后来，高校找我们共建虚拟实验室，工业客户需要数字孪生平台，银行希望把网点装进三维场景——我们把每一类需求都当作一次技术迁移，而不是一次外包交付。</p>
+          <p>今天，Alpha 同时服务<b>广告、影视、高校、企业、军工与银行</b>六大行业，用同一套工程标准做 VR 应用、小游戏、小程序、数字孪生与网站。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="mission rv">
+        <h3>我们的使命</h3>
+        <p>让每一家企业都能用上可落地的空间计算技术——不是昂贵的实验，而是能进入日常业务、能被长期维护的产品。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">差异化优势</span>
+        <h2>同样做技术，我们不一样在哪</h2>
+      </div>
+      <div class="diff-grid">
+        <div class="win diff rv"><span class="num">01</span><div><h3>技术 + 创意一体</h3><p>策划、美术、开发同队作战，方案不落地不验收，避免创意与工程互相甩锅。</p></div></div>
+        <div class="win diff rv"><span class="num">02</span><div><h3>跨行业理解力</h3><p>服务过军工的保密要求、银行的合规流程、高校的教学目标，知道每个行业的红线在哪。</p></div></div>
+        <div class="win diff rv"><span class="num">03</span><div><h3>工程化交付</h3><p>性能报告、多端适配、埋点与运维文档随项目一起交付，产品能长期跑、能继续迭代。</p></div></div>
+        <div class="win diff rv"><span class="num">04</span><div><h3>培训与知识转移</h3><p>把开发能力教给您的团队：企业内训、高校课程合作，让项目交付后您依然可控。</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">发展历程</span>
+        <h2>八年，一步步走向空间计算</h2>
+      </div>
+      <div class="tl">
+        <div class="tl-item rv"><div class="tl-time">2018</div><h4>团队成立</h4><p>从游戏引擎渲染与性能优化起步，积累实时渲染技术栈。</p></div>
+        <div class="tl-item rv"><div class="tl-time">2019</div><h4>首个 VR 广告项目</h4><p>为广告客户交付沉浸式产品体验，进入虚拟现实赛道。</p></div>
+        <div class="tl-item rv"><div class="tl-time">2021</div><h4>数字孪生平台</h4><p>上线园区级数字孪生平台，接入了实时设备数据。</p></div>
+        <div class="tl-item rv"><div class="tl-time">2023</div><h4>小游戏规模化</h4><p>休闲小游戏累计用户突破十万，跑通上线与迭代闭环。</p></div>
+        <div class="tl-item rv"><div class="tl-time">2024</div><h4>高斯泼溅重建</h4><p>引入高斯泼溅三维场景重建，应用于实景数字化项目。</p></div>
+        <div class="tl-item rv"><div class="tl-time">2026</div><h4>培训体系成型</h4><p>面向高校与企业的 VR / 游戏开发培训课程体系全面落地。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta-band rv">
+        <h2>想和这样的团队合作？</h2>
+        <p>聊聊您的项目，我们会坦诚告诉您哪些能做、怎么做、多久能上线。</p>
+        <div class="hero-cta"><a class="btn btn-solid" href="#/contact">预约免费咨询<span class="arr">→</span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ 视图：服务 ============ -->
+<section class="view" id="view-services" data-title="服务 | Alpha 的技术博客" data-desc="Alpha 提供虚拟现实开发、小游戏开发、小程序、工业数字孪生、网站开发与技术培训六大服务，覆盖广告、影视、高校、企业与军工银行客户，从方案到交付一站式完成。">
+
+  <div class="wrap page-hero">
+    <div class="crumb"><a href="#/home">首页</a> / 服务</div>
+    <h1>我们能为您<span class="grad">做什么</span></h1>
+    <p class="sub">六大服务覆盖从创意、开发到培训的完整链路——可以独立交付，也可以组合成一个整体项目。</p>
+  </div>
+
+  <div class="sec" style="padding-top:10px">
+    <div class="wrap">
+      <div class="svc-detail">
+        <article class="win svc rv">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="3"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M9 13l2 2 4-4"/></svg></div>
+          <h3>虚拟现实开发制作</h3>
+          <p>VR 应用、沉浸式展厅与体验制作，覆盖主流头显，空间交互与实时渲染一体化设计。支持高斯泼溅三维场景重建，把真实空间快速数字化。</p>
+          <div class="tags"><span>Unity / UE5</span><span>OpenXR</span><span>实时渲染</span><span>空间交互</span></div>
+        </article>
+        <article class="win svc rv">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h4l2-7 4 14 2-7h2"/></svg></div>
+          <h3>小游戏开发</h3>
+          <p>微信小游戏、H5 小游戏与休闲游戏全流程开发：玩法原型、数值设计、美术落地、上线审核与版本迭代。</p>
+          <div class="tags"><span>微信小游戏</span><span>H5 游戏</span><span>2D / 3D</span><span>上线运营</span></div>
+        </article>
+        <article class="win svc rv">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="3"/><path d="M11 18h2"/></svg></div>
+          <h3>小程序开发</h3>
+          <p>微信与抖音小程序开发，覆盖电商、工具、企业服务与教学场景，从页面设计到数据后台一次交付。</p>
+          <div class="tags"><span>微信小程序</span><span>抖音小程序</span><span>电商</span><span>企业服务</span></div>
+        </article>
+        <article class="win svc rv">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/><path d="M12 3v4.5M12 16.5V21M3 12h4.5M16.5 12H21"/></svg></div>
+          <h3>工业数字孪生</h3>
+          <p>设备、产线与园区级数字孪生平台：三维可视化建模、IoT 数据接入、SCADA 联动与运营大屏。</p>
+          <div class="tags"><span>三维可视化</span><span>IoT 接入</span><span>园区孪生</span><span>运营大屏</span></div>
+        </article>
+        <article class="win svc rv">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M2.5 9h19M2.5 15h19M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/></svg></div>
+          <h3>网站开发</h3>
+          <p>企业官网、品牌站与营销页开发，现代响应式设计，SEO 基础优化与内容后台，让您的业务在线上被看见。</p>
+          <div class="tags"><span>企业官网</span><span>响应式</span><span>SEO</span><span>内容后台</span></div>
+        </article>
+        <article class="win svc rv">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a9 9 0 0116-2.5"/><path d="M20 10a9 9 0 01-16 2.5"/><path d="M12 11v6M9 14l3 3 3-3"/></svg></div>
+          <h3>技术培训</h3>
+          <p>虚拟现实与游戏开发培训：面向高校的课程共建、面向企业的定制内训，含高斯泼溅等空间计算前沿技术分享。</p>
+          <div class="tags"><span>高校课程</span><span>企业内训</span><span>VR 培训</span><span>前沿分享</span></div>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">操作流程</span>
+        <h2>从需求到上线，五步走完</h2>
+        <p class="sub">每个环节都有明确交付物与验收标准，您随时知道项目走到哪一步。</p>
+      </div>
+      <div class="steps">
+        <div class="step rv"><h4>需求沟通</h4><p>免费咨询，明确目标、场景与预算，出具初步思路。</p></div>
+        <div class="step rv"><h4>方案与原型</h4><p>输出方案文档与可交互原型，双方确认后再动工。</p></div>
+        <div class="step rv"><h4>开发制作</h4><p>按里程碑迭代开发，关键节点提供可演示版本。</p></div>
+        <div class="step rv"><h4>测试与优化</h4><p>多端适配、性能测试与稳定性调优，交付验收报告。</p></div>
+        <div class="step rv"><h4>交付与培训</h4><p>上线部署、源码与文档移交，可选团队培训。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">常见问题</span>
+        <h2>您可能关心的事</h2>
+      </div>
+      <div class="faq">
+        <div class="faq-item rv">
+          <button class="faq-q" aria-expanded="false">报价大概怎么算？<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>按功能范围、交互复杂度与交付周期评估。免费咨询后 1–2 个工作日提供书面报价单，明码标价、无隐藏费用。</p></div>
+        </div>
+        <div class="faq-item rv">
+          <button class="faq-q" aria-expanded="false">一个项目大概需要多久？<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>小程序与官网通常 3–6 周，VR 体验与小游戏 4–10 周，数字孪生平台按数据接入规模评估。方案确认后给出明确里程碑。</p></div>
+        </div>
+        <div class="faq-item rv">
+          <button class="faq-q" aria-expanded="false">是否签署保密协议？<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>可以。军工、银行等敏感行业客户我们默认签署保密协议（NDA），并按项目要求执行数据与保密合规流程。</p></div>
+        </div>
+        <div class="faq-item rv">
+          <button class="faq-q" aria-expanded="false">你们在哪个城市？能远程合作吗？<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>总部在成都，全国项目均可远程协作。异地项目通过文档、演示视频与定期同步会议推进，交付节点不变。</p></div>
+        </div>
+        <div class="faq-item rv">
+          <button class="faq-q" aria-expanded="false">交付之后有售后保障吗？<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>每个项目含 1 个月免费质保，之后提供长期维护与迭代服务选项。培训服务帮助您的团队掌握后续维护能力。</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta-band rv">
+        <h2>不确定需要哪项服务？</h2>
+        <p>告诉我们您的目标，我们帮您判断最合适的方案与预算。</p>
+        <div class="hero-cta"><a class="btn btn-solid" href="#/contact">免费获取建议<span class="arr">→</span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 视图：作品集 ============ -->
+<section class="view" id="view-works" data-title="作品集 | Alpha 的技术博客" data-desc="查看 Alpha 团队的代表作品：虚拟现实展厅、小游戏、工业数字孪生平台、小程序、网站与虚拟现实培训项目案例。">
+
+  <div class="wrap page-hero">
+    <div class="crumb"><a href="#/home">首页</a> / 作品</div>
+    <h1>代表<span class="grad">作品</span></h1>
+    <p class="sub">每个项目都经历过需求沟通、原型确认与多轮打磨——这里只放真正上线或交付过的方案。</p>
+  </div>
+
+  <div class="sec" style="padding-top:10px">
+    <div class="wrap">
+      <div class="filter-bar" role="group" aria-label="作品筛选">
+        <button class="fchip on" data-filter="all">全部</button>
+        <button class="fchip" data-filter="vr">虚拟现实</button>
+        <button class="fchip" data-filter="game">小游戏</button>
+        <button class="fchip" data-filter="twin">数字孪生</button>
+        <button class="fchip" data-filter="miniapp">小程序</button>
+        <button class="fchip" data-filter="web">网站</button>
+        <button class="fchip" data-filter="train">培训</button>
+      </div>
+      <div class="work-grid" id="workGrid">
+        <article class="work rv" data-cat="vr">
+          <div class="work-img"><img src="assets/works-vr.jpg" alt="汽车品牌 VR 展厅中的沉浸式空间场景" width="800" height="600" loading="lazy"><span class="tag">虚拟现实</span></div>
+          <div class="work-bd"><h3>汽车品牌 VR 展厅</h3><p>沉浸式车型体验，支持手势交互与多配置切换，用于车展与门店引流。</p><div class="meta"><span>2025</span><span>VR · 展厅</span></div></div>
+        </article>
+        <article class="work rv" data-cat="game">
+          <div class="work-img"><img src="assets/works-game.jpg" alt="电竞风格的小游戏对战界面" width="800" height="600" loading="lazy"><span class="tag">小游戏</span></div>
+          <div class="work-bd"><h3>《星舰逃脱》密室小游戏</h3><p>科幻题材解谜小游戏，微信端上线，关卡系统支持运营方持续投放新内容。</p><div class="meta"><span>2025</span><span>微信小游戏</span></div></div>
+        </article>
+        <article class="work rv" data-cat="twin">
+          <div class="work-img"><img src="assets/works-twin.jpg" alt="数字孪生平台的三维可视化数据界面" width="800" height="600" loading="lazy"><span class="tag">数字孪生</span></div>
+          <div class="work-bd"><h3>智慧园区数字孪生平台</h3><p>园区建筑与设备三维可视化，接入能耗与安防数据，运营中心统一管控。</p><div class="meta"><span>2024</span><span>IoT · 大屏</span></div></div>
+        </article>
+        <article class="work rv" data-cat="miniapp">
+          <div class="work-img"><img src="assets/works-miniapp.jpg" alt="手机上的高校虚拟实验室小程序界面" width="800" height="600" loading="lazy"><span class="tag">小程序</span></div>
+          <div class="work-bd"><h3>高校虚拟实验室小程序</h3><p>面向大学生的在线实验平台，集成仿真实验与成绩管理，单学期服务三千余名学生。</p><div class="meta"><span>2024</span><span>微信小程序</span></div></div>
+        </article>
+        <article class="work rv" data-cat="web">
+          <div class="work-img"><img src="assets/works-web.jpg" alt="影视特效公司官网的代码与页面设计" width="800" height="600" loading="lazy"><span class="tag">网站</span></div>
+          <div class="work-bd"><h3>影视特效公司官网</h3><p>案例展示型品牌官网，暗色视觉与作品页适配，SEO 上线三个月自然流量翻倍。</p><div class="meta"><span>2024</span><span>官网 · SEO</span></div></div>
+        </article>
+        <article class="work rv" data-cat="train">
+          <div class="work-img"><img src="assets/works-train.jpg" alt="企业虚拟现实培训课堂中学员佩戴头显学习" width="800" height="600" loading="lazy"><span class="tag">培训</span></div>
+          <div class="work-bd"><h3>企业 VR 开发内训体系</h3><p>为制造企业定制 6 周 VR 开发内训，覆盖引擎基础到空间交互，结课即产出可演示项目。</p><div class="meta"><span>2024</span><span>企业内训</span></div></div>
+        </article>
+        <article class="work rv" data-cat="game">
+          <div class="work-img"><img src="assets/works-game2.jpg" alt="休闲小游戏的明亮彩色游戏画面" width="800" height="600" loading="lazy"><span class="tag">小游戏</span></div>
+          <div class="work-bd"><h3>《泡泡保卫战》休闲小游戏</h3><p>轻量休闲玩法，抖音小游戏渠道上线，累计用户突破十万。</p><div class="meta"><span>2023</span><span>抖音小游戏</span></div></div>
+        </article>
+        <article class="work rv" data-cat="vr">
+          <div class="work-img"><img src="assets/works-spatial.jpg" alt="高斯泼溅三维场景重建的技术渲染画面" width="800" height="600" loading="lazy"><span class="tag">虚拟现实</span></div>
+          <div class="work-bd"><h3>高斯泼溅三维场景重建</h3><p>基于高斯泼溅的实景三维重建，应用于文博场馆与工业现场的快速数字化。</p><div class="meta"><span>2025</span><span>三维重建</span></div></div>
+        </article>
+        <article class="work rv" data-cat="twin">
+          <div class="work-img"><img src="assets/works-team.jpg" alt="银行网点数字化导览项目的团队协作现场" width="800" height="600" loading="lazy"><span class="tag">数字孪生</span></div>
+          <div class="work-bd"><h3>银行网点数字化导览</h3><p>网点三维空间导览与业务数据可视化，管理层一键查看运营全貌。</p><div class="meta"><span>2023</span><span>银行 · 可视化</span></div></div>
+        </article>
+      </div>
+      <div class="cta-band rv" style="margin-top:34px">
+        <h2>想看看与您业务类似的项目细节？</h2>
+        <p>联系我们，我们可以分享更完整的过程文档与演示。</p>
+        <div class="hero-cta"><a class="btn btn-solid" href="#/contact">预约一对一沟通<span class="arr">→</span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 视图：联系我们 ============ -->
+<section class="view" id="view-contact" data-title="联系我们 | Alpha 的技术博客" data-desc="联系 Alpha 技术团队，预约免费咨询：填写需求表单或直接电话、邮件联系，我们会在一个工作日内回复，提供初步方案与报价参考。">
+
+  <div class="wrap page-hero">
+    <div class="crumb"><a href="#/home">首页</a> / 联系我们</div>
+    <h1>预约免费<span class="grad">咨询</span></h1>
+    <p class="sub">留下您的需求，我们会在一个工作日内联系您，提供初步思路与报价参考。所有信息严格保密。</p>
+  </div>
+
+  <div class="sec" style="padding-top:10px">
+    <div class="wrap">
+      <div class="contact-grid">
+        <div class="win cform rv">
+          <form id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="field"><label for="f-name">您的姓名 *</label><input id="f-name" name="name" type="text" placeholder="怎么称呼您" autocomplete="name" required></div>
+              <div class="field"><label for="f-email">邮箱 *</label><input id="f-email" name="email" type="email" placeholder="name@company.com" autocomplete="email" required></div>
+            </div>
+            <div class="form-row">
+              <div class="field"><label for="f-phone">电话</label><input id="f-phone" name="phone" type="tel" placeholder="便于我们电话沟通" autocomplete="tel"></div>
+              <div class="field"><label for="f-topic">咨询类型</label>
+                <select id="f-topic" name="topic" style="width:100%;min-height:46px;padding:11px 14px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);font-family:inherit;font-size:16px">
+                  <option value="">请选择</option>
+                  <option>虚拟现实开发</option><option>小游戏开发</option><option>小程序开发</option>
+                  <option>工业数字孪生</option><option>网站开发</option><option>技术培训</option>
+                </select>
+              </div>
+            </div>
+            <div class="field"><label for="f-msg">项目需求 *</label><textarea id="f-msg" name="message" placeholder="简单描述您的目标、场景与大概时间计划" required></textarea></div>
+            <button class="btn btn-solid" type="submit" style="width:100%;margin-top:6px">提交咨询<span class="arr">→</span></button>
+          </form>
+        </div>
+        <div>
+          <div class="contact-info">
+            <div class="win cinfo rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.13.96.36 1.9.7 2.8a2 2 0 01-.45 2.1L8.1 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.45c.9.34 1.84.57 2.8.7A2 2 0 0122 16.9z"/></svg></span><div><h4>电话</h4><p>028-8888-8888<br>周一至周五 9:00–18:00</p></div></div>
+            <div class="win cinfo rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M2 7l10 6L22 7"/></svg></span><div><h4>邮箱</h4><p>hello@alpha-studio.cn<br>合作提案欢迎直接邮件</p></div></div>
+            <div class="win cinfo rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0114 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span><div><h4>地址</h4><p>四川省成都市高新区<br>（全国项目远程协作）</p></div></div>
+            <div class="win cinfo rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span><div><h4>响应时间</h4><p>工作日 24 小时内回复<br>紧急需求请直接来电</p></div></div>
+          </div>
+          <div class="socials" aria-label="社交媒体">
+            <a href="#/contact" aria-label="微信" title="微信"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a7 7 0 016.9 8.2A6.5 6.5 0 0012 20c-1 0-2-.2-2.8-.6l-2.4 1 .7-2A7 7 0 019 4z" opacity="0"/><path d="M8.5 11.5h.01M12.5 11.5h.01M8 15c2 1 4 1 6 0"/><circle cx="7.5" cy="9.5" r="6.5" opacity="0"/><path d="M16 5a6 6 0 015.9 7 5.5 5.5 0 01-6.4 3.9M3.5 8.5h.01M7.5 15.5h.01"/></svg></a>
+            <a href="#/contact" aria-label="微博" title="微博"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10.5 9.5c-2.5.4-3.5 2-3 3.5.4 1.4 1.8 2.2 3.6 1.9 1.9-.3 2.9-1.6 2.6-2.9-.2-1.1-1.4-2.7-3.2-2.5z"/><path d="M15.5 8.5c.8.2 1.4.9 1.5 1.9M16.5 12.5c.4.5.5 1 .4 1.6"/></svg></a>
+            <a href="#/contact" aria-label="B站" title="哔哩哔哩"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="4"/><path d="M9 7V4.5M15 7V4.5M9 13v3M15 13v3M9 13h.01M15 13h.01"/></svg></a>
+            <a href="#/contact" aria-label="抖音" title="抖音"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v11a4 4 0 11-4-4M14 4c.5 3 2.5 5 5.5 5.5"/></svg></a>
+            <a href="#/contact" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4 1.5-4-2.5-6-3M9 17v4c0 1 .5 1.5 1.5 1.5M15 21c-.5.5-1 0-1-1.5V17c0-1.5.5-2.5 2-3-2.5-.5-5-1.5-5-5 0-1 .5-2 1.5-2.5-.5-1.5.5-3 1.5-3s2 1 2.5 2c1-.5 2-.5 3 0 .5-1 1.5-2 2.5-2 1 0 2 1.5 1.5 3 1 1 1.5 2.5 1.5 4 0 4.5-3 5-6 5z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="map-wrap rv">
+        <iframe title="Alpha 技术团队位置地图" src="https://uri.amap.com/marker?position=104.066,30.657&amp;name=Alpha%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F&amp;coordinate=gaode&amp;callnative=0" loading="lazy"></iframe>
+        <div class="map-link"><a href="https://uri.amap.com/marker?position=104.066,30.657&amp;name=Alpha%E6%8A%80%E6%9C%AF%E5%9B%A2%E9%98%9F" target="_blank" rel="noopener">在高德地图中打开<span class="arr">→</span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== 页脚 ===== -->
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="logo" href="#/home" aria-label="Alpha 技术博客首页">
+          <span class="logo-mark">α</span>
+          <span>Alpha 的技术博客<span class="en" style="display:block;margin-top:1px">SPATIAL STUDIO</span></span>
+        </a>
+        <p>专注虚拟现实、小游戏与数字孪生的空间计算技术团队，服务广告、影视、高校、企业与军工银行客户。</p>
+      </div>
+      <div class="foot-col">
+        <h4>快速链接</h4>
+        <a href="#/home">首页</a>
+        <a href="#/about">关于我们</a>
+        <a href="#/services">服务</a>
+        <a href="#/works">作品</a>
+        <a href="#/contact">联系我们</a>
+      </div>
+      <div class="foot-col">
+        <h4>服务</h4>
+        <a href="#/services">虚拟现实开发</a>
+        <a href="#/services">小游戏开发</a>
+        <a href="#/services">小程序开发</a>
+        <a href="#/services">工业数字孪生</a>
+        <a href="#/services">网站开发</a>
+        <a href="#/services">技术培训</a>
+      </div>
+      <div class="foot-col">
+        <h4>联系方式</h4>
+        <a href="tel:02888888888">电话：028-8888-8888</a>
+        <a href="mailto:hello@alpha-studio.cn">邮箱：hello@alpha-studio.cn</a>
+        <a href="#/contact">地址：四川省成都市高新区</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="yearNow">2026</span> Alpha 的技术博客 · 保留所有权利</span>
+      <span>虚拟现实 · 小游戏 · 数字孪生 · 高斯泼溅 · 培训</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  "use strict";
+
+  /* ---- 页内 hash 路由 ---- */
+  var views = document.querySelectorAll(".view");
+  var navLinks = document.querySelectorAll("[data-nav]");
+  var drawer = document.getElementById("drawer");
+  var menuBtn = document.getElementById("menuBtn");
+  var drawerMask = document.getElementById("drawerMask");
+  var drawerClose = document.getElementById("drawerClose");
+  var MAIN_DESC = "Alpha 的技术博客专注虚拟现实（VR）开发制作、小游戏开发、小程序、工业数字孪生、网站开发与虚拟现实培训，服务广告、影视、高校、企业、军工与银行客户。";
+
+  function parseHash(){
+    var h = location.hash || "#/home";
+    var seg = h.replace(/^#\/?/, "");
+    var known = ["home","about","services","works","contact"];
+    return known.indexOf(seg) !== -1 ? seg : "home";
+  }
+
+  function showView(name){
+    var active = null;
+    views.forEach(function(v){
+      var on = v.id === "view-" + name;
+      v.classList.toggle("on", on);
+      if(on) active = v;
+    });
+    navLinks.forEach(function(a){
+      a.classList.toggle("on", a.getAttribute("data-nav") === name);
+    });
+    if(active){
+      var t = active.getAttribute("data-title");
+      var d = active.getAttribute("data-desc") || MAIN_DESC;
+      if(t) document.title = t;
+      var m = document.querySelector('meta[name="description"]');
+      if(m) m.setAttribute("content", d);
+    }
+    window.scrollTo(0, 0);
+    closeDrawer();
+    requestReveal();
+  }
+
+  window.addEventListener("hashchange", function(){ showView(parseHash()); });
+  showView(parseHash());
+
+  /* ---- 滚动揭示 ---- */
+  var io = null;
+  function requestReveal(){
+    if(!("IntersectionObserver" in window)){ return; }
+    if(!io){
+      io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+        });
+      }, {threshold:.12});
+    }
+    document.querySelectorAll(".rv:not(.in)").forEach(function(el){ io.observe(el); });
+  }
+  requestReveal();
+
+  /* ---- 移动端抽屉菜单 ---- */
+  function openDrawer(){
+    drawer.classList.add("open");
+    menuBtn.setAttribute("aria-expanded","true");
+    document.body.style.overflow = "hidden";
+  }
+  function closeDrawer(){
+    drawer.classList.remove("open");
+    menuBtn.setAttribute("aria-expanded","false");
+    document.body.style.overflow = "";
+  }
+  menuBtn.addEventListener("click", openDrawer);
+  drawerMask.addEventListener("click", closeDrawer);
+  drawerClose.addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeDrawer(); });
+
+  /* ---- FAQ 手风琴 ---- */
+  document.querySelectorAll(".faq-item").forEach(function(item){
+    var q = item.querySelector(".faq-q");
+    var a = item.querySelector(".faq-a");
+    q.addEventListener("click", function(){
+      var open = item.classList.contains("open");
+      document.querySelectorAll(".faq-item.open").forEach(function(other){
+        other.classList.remove("open");
+        other.querySelector(".faq-q").setAttribute("aria-expanded","false");
+        other.querySelector(".faq-a").style.maxHeight = "";
+      });
+      if(!open){
+        item.classList.add("open");
+        q.setAttribute("aria-expanded","true");
+        a.style.maxHeight = a.scrollHeight + "px";
+      }
+    });
+  });
+
+  /* ---- 作品筛选 ---- */
+  var fchips = document.querySelectorAll(".fchip");
+  var works = document.querySelectorAll("#workGrid .work");
+  fchips.forEach(function(chip){
+    chip.addEventListener("click", function(){
+      fchips.forEach(function(c){ c.classList.remove("on"); });
+      chip.classList.add("on");
+      var f = chip.getAttribute("data-filter");
+      works.forEach(function(w){
+        var show = (f === "all") || (w.getAttribute("data-cat") === f);
+        w.style.display = show ? "" : "none";
+        if(show && !w.classList.contains("in")){ w.classList.add("in"); }
+      });
+    });
+  });
+
+  /* ---- 联系表单 ---- */
+  var form = document.getElementById("contactForm");
+  var toast = document.getElementById("toast");
+  var toastTimer = null;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 3200);
+  }
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = document.getElementById("f-name").value.trim();
+    var email = document.getElementById("f-email").value.trim();
+    var msg = document.getElementById("f-msg").value.trim();
+    if(!name){ showToast("请填写您的姓名"); return; }
+    if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showToast("请填写有效的邮箱地址"); return; }
+    if(!msg){ showToast("请简单描述您的项目需求"); return; }
+    showToast("提交成功，我们会在一个工作日内与您联系（演示站点，不会真实发送）");
+    form.reset();
+  });
+
+  /* ---- 页脚年份 ---- */
+  var y = document.getElementById("yearNow");
+  if(y){ y.textContent = new Date().getFullYear(); }
+})();
+</script>
+</body>
+</html>
