@@ -280,7 +280,7 @@ ul{list-style:none}
 .page-hero h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .page-hero .sub{color:var(--muted);margin:16px auto 0;max-width:62ch;font-size:15.5px}
 
-/* ===== 我的简历 ===== */
+/* ===== 关于我 ===== */
 .story{display:grid;grid-template-columns:1fr;gap:30px;align-items:center}
 .story-img{border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:16/10}
 .story-img img{width:100%;height:100%;object-fit:cover}
@@ -440,7 +440,7 @@ ul{list-style:none}
   html{scroll-behavior:auto}
   .rv{opacity:1;transform:none}
 }
-/* 打印：导出简历（打印"我的简历"视图为 A4） */
+/* 打印：导出简历（打印"关于我"视图为 A4） */
 @media print{
   body{background:#fff!important;color:#000!important;font-size:13px}
   .site-head,.drawer,.bg-scene,.toast,.wave-sep,.page-hero .crumb,.cta-band,.hero-cta,.foot-links{display:none!important}
@@ -472,7 +472,7 @@ ul{list-style:none}
     <nav class="main-nav" aria-label="主导航">
       <a href="#/home" data-nav="home">首页</a>
       <a href="#/works" data-nav="works">作品集</a>
-      <a href="#/about" data-nav="about">我的简历</a>
+      <a href="#/about" data-nav="about">关于我</a>
       <a href="#/notes" data-nav="notes">学习手账</a>
       <a href="#/contact" data-nav="contact">联系我</a>
     </nav>
@@ -492,7 +492,7 @@ ul{list-style:none}
     </button>
     <a href="#/home" data-nav="home">首页</a>
     <a href="#/works" data-nav="works">作品集</a>
-    <a href="#/about" data-nav="about">我的简历</a>
+    <a href="#/about" data-nav="about">关于我</a>
     <a href="#/notes" data-nav="notes">学习手账</a>
     <a href="#/contact" data-nav="contact">联系我</a>
     <button class="btn btn-solid" id="exportBtnM" type="button" style="width:100%">导出简历</button>
@@ -626,7 +626,7 @@ ul{list-style:none}
         <p>如果您在招 VR / Unity / 游戏客户端实习生，欢迎联系我——我可以随时发送简历与可试玩作品。</p>
         <div class="hero-cta">
           <a class="btn btn-solid" href="#/contact">发送实习沟通邀请<span class="arr">→</span></a>
-          <a class="btn btn-ghost" href="#/about">先看我的简历<span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#/about">先看关于我<span class="arr">→</span></a>
         </div>
       </div>
     </div>
@@ -700,12 +700,12 @@ ul{list-style:none}
   </div>
 </section>
 
-<!-- ============ 我的简历 ============ -->
-<section class="view" id="view-about" data-title="我的简历 | 贾雨婷 · 虚拟现实技术应用" data-desc="贾雨婷的简历：成都职业技术学院创意设计学院虚拟现实技术应用专业（2024.09-2027.06），世界技能大赛数字交互媒体设计项目参赛经历，求职 VR / Unity 开发实习。">
+<!-- ============ 关于我 ============ -->
+<section class="view" id="view-about" data-title="关于我 | 贾雨婷 · 虚拟现实技术应用" data-desc="贾雨婷的简历：成都职业技术学院创意设计学院虚拟现实技术应用专业（2024.09-2027.06），世界技能大赛数字交互媒体设计项目参赛经历，求职 VR / Unity 开发实习。">
 
   <div class="wrap page-hero">
-    <div class="crumb"><a href="#/home">首页</a> / 我的简历</div>
-    <h1>我的<span class="grad">简历</span></h1>
+    <div class="crumb"><a href="#/home">首页</a> / 关于我</div>
+    <h1>关于<span class="grad">我</span></h1>
     <p class="sub">贾雨婷 · 成都职业技术学院创意设计学院 · 虚拟现实技术应用专业 · 大三在读 · 求职实习中</p>
   </div>
 
@@ -926,7 +926,7 @@ ul{list-style:none}
         <span class="grp">快速链接</span>
         <a href="#/home">首页</a>
         <a href="#/works">作品集</a>
-        <a href="#/about">我的简历</a>
+        <a href="#/about">关于我</a>
         <a href="#/notes">学习手账</a>
         <a href="#/contact">联系我</a>
         <span class="grp">技能标签</span>
@@ -1028,7 +1028,7 @@ ul{list-style:none}
   drawerClose.addEventListener("click", closeDrawer);
   document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeDrawer(); });
 
-  /* ---- 导出简历（打印"我的简历"为 PDF） ---- */
+  /* ---- 导出简历（打印"关于我"为 PDF） ---- */
   function exportResume(){
     closeDrawer();
     if(location.hash !== "#/about"){ location.hash = "#/about"; }
