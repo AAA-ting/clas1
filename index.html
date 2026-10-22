@@ -280,7 +280,7 @@ ul{list-style:none}
 .page-hero h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .page-hero .sub{color:var(--muted);margin:16px auto 0;max-width:62ch;font-size:15.5px}
 
-/* ===== 关于我与简历 ===== */
+/* ===== 我的简历 ===== */
 .story{display:grid;grid-template-columns:1fr;gap:30px;align-items:center}
 .story-img{border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:16/10}
 .story-img img{width:100%;height:100%;object-fit:cover}
@@ -440,7 +440,7 @@ ul{list-style:none}
   html{scroll-behavior:auto}
   .rv{opacity:1;transform:none}
 }
-/* 打印：导出简历（打印"关于我与简历"视图为 A4） */
+/* 打印：导出简历（打印"我的简历"视图为 A4） */
 @media print{
   body{background:#fff!important;color:#000!important;font-size:13px}
   .site-head,.drawer,.bg-scene,.toast,.wave-sep,.page-hero .crumb,.cta-band,.hero-cta,.foot-links{display:none!important}
@@ -926,7 +926,7 @@ ul{list-style:none}
         <span class="grp">快速链接</span>
         <a href="#/home">首页</a>
         <a href="#/works">作品集</a>
-        <a href="#/about">关于我与简历</a>
+        <a href="#/about">我的简历</a>
         <a href="#/notes">学习手账</a>
         <a href="#/contact">联系我</a>
         <span class="grp">技能标签</span>
@@ -1028,7 +1028,7 @@ ul{list-style:none}
   drawerClose.addEventListener("click", closeDrawer);
   document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeDrawer(); });
 
-  /* ---- 导出简历（打印"关于我与简历"为 PDF） ---- */
+  /* ---- 导出简历（打印"我的简历"为 PDF） ---- */
   function exportResume(){
     closeDrawer();
     if(location.hash !== "#/about"){ location.hash = "#/about"; }
