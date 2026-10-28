@@ -135,6 +135,7 @@ ul{list-style:none}
 
 /* 区块 */
 .sec{padding:64px 0}
+.sec[id]{scroll-margin-top:96px}
 .sec-head{max-width:760px;margin:0 auto 44px;text-align:center}
 .eyebrow{
   display:inline-flex;align-items:center;gap:8px;
@@ -257,21 +258,6 @@ ul{list-style:none}
 .pick-bd p{color:var(--muted);font-size:13.5px}
 .center-cta{text-align:center;margin-top:34px}
 
-/* 最终 CTA */
-.cta-band{
-  border-radius:26px;border:none;
-  background:linear-gradient(135deg,#335372 0%,#275e5c 60%,#1f6b52 100%);
-  color:#fff;padding:48px 28px;text-align:center;
-  box-shadow:0 20px 56px rgba(51,83,114,.32);
-}
-.cta-band h2{font-family:var(--font-title);font-size:clamp(23px,4.4vw,34px);font-weight:900;line-height:1.3}
-.cta-band p{color:rgba(255,255,255,.82);margin:12px auto 26px;max-width:52ch;font-size:15px}
-.cta-band .hero-cta{margin-top:0}
-.cta-band .btn-solid{background:#fff;color:var(--navy);box-shadow:0 8px 22px rgba(0,0,0,.22)}
-.cta-band .btn-solid:hover{background:#f1f7ff}
-.cta-band .btn-ghost{border-color:rgba(255,255,255,.5);color:#fff;background:transparent}
-.cta-band .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.1);color:#fff}
-
 /* 内页头 */
 .page-hero{padding:56px 20px 8px;text-align:center}
 .page-hero .crumb{font-size:13px;color:var(--muted);margin-bottom:16px}
@@ -325,23 +311,6 @@ ul{list-style:none}
 .honor-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:760px;margin:0 auto}
 .honor-chips .chip{padding:9px 20px;border-radius:99px;border:1px solid var(--line);font-size:14px;font-weight:500;color:var(--navy);background:rgba(255,255,255,.72);display:inline-flex;align-items:center;gap:8px}
 .honor-chips .chip svg{width:15px;height:15px;stroke:#f59e0b;flex:none}
-
-/* ===== 作品集 ===== */
-.filter-bar{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:26px;justify-content:center}
-.fchip{padding:9px 19px;border-radius:99px;border:1px solid var(--line);font-size:14px;font-weight:500;color:var(--muted);background:rgba(255,255,255,.72);transition:all .16s ease;min-height:44px}
-.fchip:hover{color:var(--navy);border-color:rgba(51,83,114,.4)}
-.fchip.on{background:var(--navy);color:#fff;border-color:transparent;font-weight:700;box-shadow:0 6px 18px rgba(51,83,114,.26)}
-.work-grid{display:grid;grid-template-columns:1fr;gap:20px}
-.work{border-radius:var(--radius);overflow:hidden;border:1px solid rgba(255,255,255,.92);background:var(--card-solid);box-shadow:0 6px 22px rgba(51,83,114,.08);transition:transform .18s ease,box-shadow .18s ease}
-.work:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
-.work-img{aspect-ratio:3/2;overflow:hidden;position:relative;background:#dce9f5}
-.work-img img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
-.work:hover .work-img img{transform:scale(1.06)}
-.work-img .tag{position:absolute;top:14px;left:14px;padding:5px 13px;border-radius:99px;font-size:12px;font-weight:700;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.95);color:var(--navy);backdrop-filter:blur(6px)}
-.work-bd{padding:18px 18px 20px}
-.work-bd h3{font-size:16.5px;font-weight:700;margin-bottom:6px;color:var(--ink)}
-.work-bd p{color:var(--muted);font-size:13.5px}
-.work-bd .meta{display:flex;gap:14px;margin-top:12px;font-size:12.5px;color:#8aa0b6;font-family:var(--font-mono)}
 
 /* ===== 学习手账 ===== */
 .note-grid{display:grid;grid-template-columns:1fr;gap:18px}
@@ -409,7 +378,6 @@ ul{list-style:none}
   .tl{grid-template-columns:repeat(3,1fr);gap:0 40px}
   .tl-item{margin-left:0}
   .note-grid{grid-template-columns:repeat(3,1fr)}
-  .work-grid{grid-template-columns:repeat(3,1fr)}
   .form-row{grid-template-columns:1fr 1fr}
   .car-prev{left:-22px}.car-next{right:-22px}
 }
@@ -438,7 +406,7 @@ ul{list-style:none}
 /* 打印：导出简历（打印"关于我"视图为 A4） */
 @media print{
   body{background:#fff!important;color:#000!important;font-size:13px}
-  .site-head,.drawer,.bg-scene,.toast,.wave-sep,.page-hero .crumb,.cta-band,.hero-cta,.foot-links{display:none!important}
+  .site-head,.drawer,.bg-scene,.toast,.wave-sep,.page-hero .crumb,.hero-cta,.foot-links{display:none!important}
   .view{display:none!important}
   .view#view-about{display:block!important}
   .view .rv{opacity:1!important;transform:none!important}
@@ -466,10 +434,10 @@ ul{list-style:none}
     </a>
     <nav class="main-nav" aria-label="主导航">
       <a href="#/home" data-nav="home">首页</a>
-      <a href="#/works" data-nav="works">作品集</a>
+      <a href="#/home#sec-works" data-nav="works">作品集</a>
       <a href="#/about" data-nav="about">关于我</a>
-      <a href="#/notes" data-nav="notes">学习手账</a>
-      <a href="#/contact" data-nav="contact">联系我</a>
+      <a href="#/home#sec-notes" data-nav="notes">学习手账</a>
+      <a href="#/home#sec-contact" data-nav="contact">联系我</a>
     </nav>
     <div class="head-cta"><button class="btn btn-solid" id="exportBtn" type="button">导出简历</button></div>
     <button class="menu-btn" id="menuBtn" aria-label="打开菜单" aria-expanded="false">
@@ -486,10 +454,10 @@ ul{list-style:none}
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" width="18" height="18"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
     <a href="#/home" data-nav="home">首页</a>
-    <a href="#/works" data-nav="works">作品集</a>
+    <a href="#/home#sec-works" data-nav="works">作品集</a>
     <a href="#/about" data-nav="about">关于我</a>
-    <a href="#/notes" data-nav="notes">学习手账</a>
-    <a href="#/contact" data-nav="contact">联系我</a>
+    <a href="#/home#sec-notes" data-nav="notes">学习手账</a>
+    <a href="#/home#sec-contact" data-nav="contact">联系我</a>
     <button class="btn btn-solid" id="exportBtnM" type="button" style="width:100%">导出简历</button>
   </nav>
 </div>
@@ -504,8 +472,8 @@ ul{list-style:none}
     <h1>把虚拟变成现实，<span class="grad">把学习做成作品</span></h1>
     <p class="hero-sub">成都职业技术学院 · 虚拟现实技术应用专业在读，专注 Unity 小游戏与 VR 应用开发，正在寻找一份能一起做产品、一起成长的实习。</p>
     <div class="hero-cta">
-      <a class="btn btn-solid" href="#/works">查看作品集<span class="arr">→</span></a>
-      <a class="btn btn-ghost" href="#/contact">联系我<span class="arr">→</span></a>
+      <a class="btn btn-solid" href="#/home#sec-works">查看作品集<span class="arr">→</span></a>
+      <a class="btn btn-ghost" href="#/home#sec-contact">联系我<span class="arr">→</span></a>
     </div>
 
     <div class="carousel" id="carousel" aria-label="精选项目轮播">
@@ -514,12 +482,12 @@ ul{list-style:none}
       </button>
       <div class="car-viewport">
         <div class="car-track" id="carTrack">
-          <a class="car-card" href="#/works"><img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=1100&auto=format&fit=crop" alt="Unity 小游戏《星舰逃脱》主视觉配图" width="1100" height="630"><span class="car-info"><span class="tag">Unity 小游戏 · 主打方向</span><h3>《星舰逃脱》密室解谜小游戏</h3></span><span class="car-cta">看项目 →</span></a>
-          <a class="car-card" href="#/works"><img src="https://images.unsplash.com/photo-1626379953822-baec19c3accd?q=80&w=1100&auto=format&fit=crop" alt="VR 展厅沉浸式课程设计配图" width="1100" height="630"><span class="car-info"><span class="tag">虚拟现实</span><h3>汽车品牌 VR 展厅课程设计</h3></span><span class="car-cta">看项目 →</span></a>
-          <a class="car-card" href="#/works"><img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=1100&auto=format&fit=crop" alt="数字孪生三维可视化课程作业配图" width="1100" height="630"><span class="car-info"><span class="tag">数字孪生</span><h3>智慧园区数字孪生 Demo</h3></span><span class="car-cta">看项目 →</span></a>
-          <a class="car-card" href="#/works"><img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?q=80&w=1100&auto=format&fit=crop" alt="高斯泼溅三维场景重建学习项目配图" width="1100" height="630"><span class="car-info"><span class="tag">三维重建</span><h3>高斯泼溅（3DGS）场景重建</h3></span><span class="car-cta">看项目 →</span></a>
-          <a class="car-card" href="#/works"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=1100&auto=format&fit=crop" alt="校园二手书微信小程序界面配图" width="1100" height="630"><span class="car-info"><span class="tag">小程序</span><h3>校园二手书微信小程序</h3></span><span class="car-cta">看项目 →</span></a>
-          <a class="car-card" href="#/works"><img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1100&auto=format&fit=crop" alt="UE 虚幻引擎场景漫游作业配图" width="1100" height="630"><span class="car-info"><span class="tag">UE 虚幻引擎</span><h3>UE 场景漫游课程作业</h3></span><span class="car-cta">看项目 →</span></a>
+          <a class="car-card" href="#/home#sec-works"><img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=1100&auto=format&fit=crop" alt="Unity 小游戏《星舰逃脱》主视觉配图" width="1100" height="630"><span class="car-info"><span class="tag">Unity 小游戏 · 主打方向</span><h3>《星舰逃脱》密室解谜小游戏</h3></span><span class="car-cta">看项目 →</span></a>
+          <a class="car-card" href="#/home#sec-works"><img src="https://images.unsplash.com/photo-1626379953822-baec19c3accd?q=80&w=1100&auto=format&fit=crop" alt="VR 展厅沉浸式课程设计配图" width="1100" height="630"><span class="car-info"><span class="tag">虚拟现实</span><h3>汽车品牌 VR 展厅课程设计</h3></span><span class="car-cta">看项目 →</span></a>
+          <a class="car-card" href="#/home#sec-works"><img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=1100&auto=format&fit=crop" alt="数字孪生三维可视化课程作业配图" width="1100" height="630"><span class="car-info"><span class="tag">数字孪生</span><h3>智慧园区数字孪生 Demo</h3></span><span class="car-cta">看项目 →</span></a>
+          <a class="car-card" href="#/home#sec-works"><img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?q=80&w=1100&auto=format&fit=crop" alt="高斯泼溅三维场景重建学习项目配图" width="1100" height="630"><span class="car-info"><span class="tag">三维重建</span><h3>高斯泼溅（3DGS）场景重建</h3></span><span class="car-cta">看项目 →</span></a>
+          <a class="car-card" href="#/home#sec-works"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=1100&auto=format&fit=crop" alt="校园二手书微信小程序界面配图" width="1100" height="630"><span class="car-info"><span class="tag">小程序</span><h3>校园二手书微信小程序</h3></span><span class="car-cta">看项目 →</span></a>
+          <a class="car-card" href="#/home#sec-works"><img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1100&auto=format&fit=crop" alt="UE 虚幻引擎场景漫游作业配图" width="1100" height="630"><span class="car-info"><span class="tag">UE 虚幻引擎</span><h3>UE 场景漫游课程作业</h3></span><span class="car-cta">看项目 →</span></a>
         </div>
       </div>
       <button class="car-btn car-next" id="carNext" aria-label="下一个项目">
@@ -587,109 +555,99 @@ ul{list-style:none}
     </div>
   </div>
 
-  <div class="sec" style="padding-top:0">
+  <div class="sec" id="sec-works" style="padding-top:0">
     <div class="wrap">
       <div class="sec-head rv">
-        <span class="eyebrow">精选作品</span>
-        <h2>每个作品都是一次完整交付</h2>
+        <span class="eyebrow">作品集 · Portfolio</span>
+        <h2>三个代表作品</h2>
         <p class="sub">从玩法原型、美术资源到打包上线，全部由我自己完成。</p>
       </div>
       <div class="pick-grid">
-        <a class="pick rv" href="#/works">
+        <article class="pick rv">
           <div class="pick-img"><img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=1100&auto=format&fit=crop" alt="《星舰逃脱》密室小游戏项目封面" width="800" height="600" loading="lazy"><span class="tag">Unity 小游戏</span></div>
           <div class="pick-bd"><h3>《星舰逃脱》密室解谜</h3><p>有限状态机驱动 NPC，对象池优化弹幕，已打包 WebGL 可试玩。</p></div>
-        </a>
-        <a class="pick rv" href="#/works">
+        </article>
+        <article class="pick rv">
           <div class="pick-img"><img src="https://images.unsplash.com/photo-1626379953822-baec19c3accd?q=80&w=1100&auto=format&fit=crop" alt="汽车品牌 VR 展厅课程设计封面" width="800" height="600" loading="lazy"><span class="tag">虚拟现实</span></div>
           <div class="pick-bd"><h3>汽车品牌 VR 展厅</h3><p>VR 看车交互设计：手势查看配置、场景切换与语音讲解。</p></div>
-        </a>
-        <a class="pick rv" href="#/works">
+        </article>
+        <article class="pick rv">
           <div class="pick-img"><img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=1100&auto=format&fit=crop" alt="智慧园区数字孪生 Demo 封面" width="800" height="600" loading="lazy"><span class="tag">数字孪生</span></div>
           <div class="pick-bd"><h3>智慧园区数字孪生 Demo</h3><p>三维园区可视化 + 模拟数据接入，课程设计高分作品。</p></div>
-        </a>
+        </article>
       </div>
-      <div class="center-cta rv"><a class="btn btn-ghost" href="#/works">查看全部作品<span class="arr">→</span></a></div>
+    </div>
+  </div>
+
+  <div class="sec" id="sec-notes" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">学习手账 · Notes</span>
+        <h2>三个思考片段</h2>
+        <p class="sub">我把踩过的坑和想通的道理写成笔记——它们也是我学习能力最好的证明。</p>
+      </div>
+      <div class="note-grid">
+        <article class="win note rv">
+          <span class="tag">Unity C# 实践</span>
+          <h3>《从零搭建 Unity 角色有限状态机（FSM）》</h3>
+          <p>为什么不用 if-else 管理角色状态？手写 Idle/Run/Jump/Attack 状态机，顺带解决了动画打断与输入缓冲问题。</p>
+          <div class="meta"><span>2025.06</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+        </article>
+        <article class="win note rv">
+          <span class="tag">VR 交互设计</span>
+          <h3>《VR 展厅里的"手感"：传送、抓取与射线交互调优》</h3>
+          <p>XR Toolkit 的默认手感很"飘"。整理了传送区设置、抓取吸附阈值与射线反馈的实际调参记录。</p>
+          <div class="meta"><span>2025.04</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+        </article>
+        <article class="win note rv">
+          <span class="tag">三维重建</span>
+          <h3>《高斯泼溅（3DGS）入门：从实拍到引擎漫游》</h3>
+          <p>用手机环绕拍摄训练出第一个 3DGS 场景，再转成引擎可用资源。记录采集路径规划与常见重建失败原因。</p>
+          <div class="meta"><span>2025.09</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+        </article>
+      </div>
     </div>
   </div>
 
   <div class="wave-sep" aria-hidden="true" style="transform:rotate(180deg)"><svg viewBox="0 0 1440 64" preserveAspectRatio="none"><use href="#ic-wave"/></svg></div>
 
-  <div class="sec" style="padding-top:0">
+  <div class="sec" id="sec-contact" style="padding-top:0">
     <div class="wrap">
-      <div class="cta-band rv">
-        <h2>正在寻找 2026 实习机会</h2>
-        <p>如果您在招 VR / Unity / 游戏客户端实习生，欢迎联系我——我可以随时发送简历与可试玩作品。</p>
-        <div class="hero-cta">
-          <a class="btn btn-solid" href="#/contact">发送实习沟通邀请<span class="arr">→</span></a>
-          <a class="btn btn-ghost" href="#/about">先看关于我<span class="arr">→</span></a>
+      <div class="sec-head rv">
+        <span class="eyebrow">联系我 · Contact</span>
+        <h2>留下您的实习邀请</h2>
+        <p class="sub">如果您在招 VR / Unity / 游戏客户端实习生，欢迎发来面试邀请——我会在 24 小时内回复。</p>
+      </div>
+      <div class="contact-stack">
+        <div class="win cform rv">
+          <div class="cinfo-stack">
+            <div class="cinfo-row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 018.6 11.7A8.5 8.5 0 0112 21a9.6 9.6 0 01-3.4-.6L4 21.5l1-3.2A9 9 0 0112 3z"/><path d="M8.5 11.5h.01M12.5 11.5h.01M8 15c2 1 4 1 6 0"/></svg></span><div><h4>个人微信</h4><p>yysh_yolo_self13 · 备注"求职沟通"通过更快</p></div></div>
+            <div class="cinfo-row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.13.96.36 1.9.7 2.8a2 2 0 01-.45 2.1L8.1 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.45c.9.34 1.84.57 2.8.7A2 2 0 0122 16.9z"/></svg></span><div><h4>手机电话</h4><p>19382262605 · 工作日 9:00–21:00</p></div></div>
+            <div class="cinfo-row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M2 7l10 6L22 7"/></svg></span><div><h4>电子邮箱</h4><p>363344172@qq.com · 简历与项目文件随时可发</p></div></div>
+            <div class="cinfo-row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1116 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><h4>所在城市</h4><p>四川 · 成都市 · 成都本地优先，可远程</p></div></div>
+          </div>
+          <form id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="field"><label for="f-name">您的姓名 / 职务 *</label><input id="f-name" name="name" type="text" placeholder="怎么称呼您" autocomplete="name" required></div>
+              <div class="field"><label for="f-company">企业 / 团队名称 *</label><input id="f-company" name="company" type="text" placeholder="您的公司或团队" autocomplete="organization" required></div>
+            </div>
+            <div class="form-row">
+              <div class="field"><label for="f-topic">意向岗位</label>
+                <select id="f-topic" name="topic">
+                  <option value="">请选择</option>
+                  <option>VR 开发实习生</option>
+                  <option>Unity 游戏客户端实习生</option>
+                  <option>UE 虚幻引擎实习生</option>
+                  <option>数字孪生 / 三维可视化实习生</option>
+                  <option>其他岗位</option>
+                </select>
+              </div>
+              <div class="field"><label for="f-contact">联系方式</label><input id="f-contact" name="contact" type="text" placeholder="电话 / 微信 / 邮箱均可"></div>
+            </div>
+            <div class="field"><label for="f-msg">留言详情 *</label><textarea id="f-msg" name="message" placeholder="简单介绍岗位内容、工作形式（到岗/远程）与您的期望" required></textarea></div>
+            <button class="btn btn-solid" type="submit" style="width:100%;margin-top:6px">发送实习沟通邀请<span class="arr">→</span></button>
+          </form>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 作品集 ============ -->
-<section class="view" id="view-works" data-title="作品集 | 贾雨婷 · 虚拟现实技术应用" data-desc="贾雨婷的作品集：Unity 小游戏、UE 虚幻引擎场景、VR 课程设计、数字孪生与高斯泼溅项目、微信小程序等学生作品。">
-
-  <div class="wrap page-hero">
-    <div class="crumb"><a href="#/home">首页</a> / 作品集</div>
-    <h1>我的<span class="grad">作品集</span></h1>
-    <p class="sub">课程设计与自主项目的完整记录——每个作品都从原型做到可演示、可试玩。</p>
-  </div>
-
-  <div class="sec" style="padding-top:24px">
-    <div class="wrap">
-      <div class="filter-bar" role="group" aria-label="作品筛选">
-        <button class="fchip on" data-filter="all">全部</button>
-        <button class="fchip" data-filter="unity">Unity</button>
-        <button class="fchip" data-filter="ue">UE 虚幻引擎</button>
-        <button class="fchip" data-filter="vr">VR 体验</button>
-        <button class="fchip" data-filter="twin">数字孪生</button>
-        <button class="fchip" data-filter="miniapp">小程序</button>
-        <button class="fchip" data-filter="web">Web</button>
-      </div>
-      <div class="work-grid" id="workGrid">
-        <article class="work rv" data-cat="unity">
-          <div class="work-img"><img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=1100&auto=format&fit=crop" alt="Unity 小游戏《星舰逃脱》电竞风格画面" width="800" height="600" loading="lazy"><span class="tag">Unity</span></div>
-          <div class="work-bd"><h3>《星舰逃脱》密室解谜小游戏</h3><p>主打作品。有限状态机（FSM）驱动守卫 AI，对象池优化弹幕性能，WebGL 打包可试玩。</p><div class="meta"><span>2025</span><span>Unity · C# · FSM</span></div></div>
-        </article>
-        <article class="work rv" data-cat="vr">
-          <div class="work-img"><img src="https://images.unsplash.com/photo-1626379953822-baec19c3accd?q=80&w=1100&auto=format&fit=crop" alt="汽车品牌 VR 展厅课程设计沉浸场景" width="800" height="600" loading="lazy"><span class="tag">VR 体验</span></div>
-          <div class="work-bd"><h3>汽车品牌 VR 展厅课程设计</h3><p>VR 看车：手势切换车漆与配置、场景光效调整、语音讲解触发，适配主流一体机头显。</p><div class="meta"><span>2025</span><span>Unity · XR Toolkit</span></div></div>
-        </article>
-        <article class="work rv" data-cat="twin">
-          <div class="work-img"><img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=1100&auto=format&fit=crop" alt="智慧园区数字孪生三维可视化界面" width="800" height="600" loading="lazy"><span class="tag">数字孪生</span></div>
-          <div class="work-bd"><h3>智慧园区数字孪生 Demo</h3><p>园区建筑与管线三维可视化，接入模拟传感数据，大屏联动展示，课程设计优秀作品。</p><div class="meta"><span>2025</span><span>Unity · 数据可视化</span></div></div>
-        </article>
-        <article class="work rv" data-cat="miniapp">
-          <div class="work-img"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=1100&auto=format&fit=crop" alt="校园二手书微信小程序界面" width="800" height="600" loading="lazy"><span class="tag">小程序</span></div>
-          <div class="work-bd"><h3>校园二手书微信小程序</h3><p>发布、搜索与站内私信，微信云开发实现，服务同校同学的真实二手交易需求。</p><div class="meta"><span>2025</span><span>微信云开发 · WXML</span></div></div>
-        </article>
-        <article class="work rv" data-cat="ue">
-          <div class="work-img"><img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1100&auto=format&fit=crop" alt="UE 虚幻引擎场景漫游课程作业" width="800" height="600" loading="lazy"><span class="tag">UE 虚幻引擎</span></div>
-          <div class="work-bd"><h3>UE 场景漫游课程作业</h3><p>虚幻引擎地形、植被与灯光烘焙实践，第一人称漫游交互与过场镜头设计。</p><div class="meta"><span>2025</span><span>UE5 · Lumen</span></div></div>
-        </article>
-        <article class="work rv" data-cat="unity">
-          <div class="work-img"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1100&auto=format&fit=crop" alt="休闲小游戏《泡泡保卫战》明亮画面" width="800" height="600" loading="lazy"><span class="tag">Unity</span></div>
-          <div class="work-bd"><h3>《泡泡保卫战》休闲小游戏</h3><p>Unity 入门后的第一个完整作品：塔防玩法原型、音效管理与关卡编辑器。</p><div class="meta"><span>2024</span><span>Unity · 塔防</span></div></div>
-        </article>
-        <article class="work rv" data-cat="vr">
-          <div class="work-img"><img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?q=80&w=1100&auto=format&fit=crop" alt="高斯泼溅三维场景重建技术画面" width="800" height="600" loading="lazy"><span class="tag">VR 体验</span></div>
-          <div class="work-bd"><h3>高斯泼溅（3DGS）场景重建</h3><p>实拍照片训练三维重建场景，导入引擎实现第一人称漫游，探索实景数字化的完整流程。</p><div class="meta"><span>2025</span><span>3DGS · 引擎集成</span></div></div>
-        </article>
-        <article class="work rv" data-cat="web">
-          <div class="work-img"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1100&auto=format&fit=crop" alt="个人主页网站的代码与设计" width="800" height="600" loading="lazy"><span class="tag">Web</span></div>
-          <div class="work-bd"><h3>个人求职网站</h3><p>就是您正在浏览的这个网站——纯手写 HTML/CSS/JS，响应式布局与轮播交互。</p><div class="meta"><span>2026</span><span>HTML · CSS · JS</span></div></div>
-        </article>
-        <article class="work rv" data-cat="twin">
-          <div class="work-img"><img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=1100&auto=format&fit=crop" alt="数据可视化大屏课程作业现场" width="800" height="600" loading="lazy"><span class="tag">数字孪生</span></div>
-          <div class="work-bd"><h3>数据可视化大屏课程作业</h3><p>工业设备数据接入三维场景，图表与 3D 联动，练习数字孪生的基础数据链路。</p><div class="meta"><span>2024</span><span>ECharts · Three.js</span></div></div>
-        </article>
-      </div>
-      <div class="cta-band rv" style="margin-top:36px">
-        <h2>想看某个作品的完整过程？</h2>
-        <p>每个项目我都有设计文档、迭代记录与演示视频，欢迎联系我详细介绍。</p>
-        <div class="hero-cta"><a class="btn btn-solid" href="#/contact">联系我看演示<span class="arr">→</span></a></div>
       </div>
     </div>
   </div>
@@ -786,112 +744,8 @@ ul{list-style:none}
         <p style="font-size:14.5px">工作积极认真，细心负责，熟练运用办公自动化软件，善于在工作中提出问题、发现问题、解决问题，有较强的分析能力；勤奋好学，踏实肯干，动手能力强，认真负责，有很强的社会责任感；坚毅不拔，吃苦耐劳，喜欢和勇于迎接新挑战。</p>
       </div>
       <div class="center-cta rv">
-        <a class="btn btn-ghost" href="#/works">看看我的作品<span class="arr">→</span></a>
-        <a class="btn btn-solid" href="#/contact" style="margin-left:12px">联系我<span class="arr">→</span></a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 学习手账 ============ -->
-<section class="view" id="view-notes" data-title="学习手账 | 贾雨婷 · 虚拟现实技术应用" data-desc="贾雨婷的学习手账：Unity C# 实践、性能优化、UE 场景制作、高斯泼溅学习笔记，记录学习过程的思考与总结。">
-
-  <div class="wrap page-hero">
-    <div class="crumb"><a href="#/home">首页</a> / 学习手账</div>
-    <h1>学习<span class="grad">手账</span></h1>
-    <p class="sub">我把踩过的坑和想通的道理写成笔记——它们也是我学习能力最好的证明。</p>
-  </div>
-
-  <div class="sec" style="padding-top:24px">
-    <div class="wrap">
-      <div class="note-grid">
-        <article class="win note rv">
-          <span class="tag">Unity C# 实践</span>
-          <h3>《从零搭建 Unity 角色有限状态机（FSM）》</h3>
-          <p>为什么不用 if-else 管理角色状态？手写 Idle/Run/Jump/Attack 状态机，顺带解决了动画打断与输入缓冲问题。</p>
-          <div class="meta"><span>2025.06</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-        </article>
-        <article class="win note rv">
-          <span class="tag">性能优化</span>
-          <h3>《Instantiate 卡顿克星：写一个通用 C# 对象池》</h3>
-          <p>弹幕频繁生成导致掉帧，Profiler 定位后用对象池重构。记录了池的通用接口设计与回收时机。</p>
-          <div class="meta"><span>2025.05</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-        </article>
-        <article class="win note rv">
-          <span class="tag">VR 交互设计</span>
-          <h3>《VR 展厅里的"手感"：传送、抓取与射线交互调优》</h3>
-          <p>XR Toolkit 的默认手感很"飘"。整理了传送区设置、抓取吸附阈值与射线反馈的实际调参记录。</p>
-          <div class="meta"><span>2025.04</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-        </article>
-        <article class="win note rv">
-          <span class="tag">UE 场景制作</span>
-          <h3>《大二 UE 场景漫游作业札记：地形、植被与灯光烘焙》</h3>
-          <p>第一次用虚幻引擎搭完整场景，记录 Landscape 雕刻、Foliage 散布与 Lumen 光照的踩坑过程。</p>
-          <div class="meta"><span>2025.03</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-        </article>
-        <article class="win note rv">
-          <span class="tag">三维重建</span>
-          <h3>《高斯泼溅（3DGS）入门：从实拍到引擎漫游》</h3>
-          <p>用手机环绕拍摄训练出第一个 3DGS 场景，再转成引擎可用资源。记录采集路径规划与常见重建失败原因。</p>
-          <div class="meta"><span>2025.09</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-        </article>
-        <article class="win note rv">
-          <span class="tag">数字孪生</span>
-          <h3>《数字孪生大屏怎么做才不像"花架子"》</h3>
-          <p>课程设计的反思：三维可视化要服务于数据可读性。整理了数据分层、告警联动与交互优先级的设计原则。</p>
-          <div class="meta"><span>2025.11</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-        </article>
-      </div>
-      <div class="cta-band rv" style="margin-top:36px">
-        <h2>想聊聊我的学习方式？</h2>
-        <p>完整笔记与项目源码都保存完好，面试时欢迎随时翻阅。</p>
-        <div class="hero-cta"><a class="btn btn-solid" href="#/contact">联系我<span class="arr">→</span></a></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 联系我 ============ -->
-<section class="view" id="view-contact" data-title="联系我 | 贾雨婷 · 求职简历" data-desc="联系贾雨婷：VR / Unity 开发实习生求职中，一周内到岗。可通过表单、微信、邮箱联系，欢迎实习沟通与面试邀请。">
-
-  <div class="wrap page-hero">
-    <div class="crumb"><a href="#/home">首页</a> / 联系我</div>
-    <h1>联系<span class="grad">我</span></h1>
-    <p class="sub">如果您在招 VR / Unity / 游戏客户端实习生，欢迎发来面试邀请——我会在 24 小时内回复。</p>
-  </div>
-
-  <div class="sec" style="padding-top:24px">
-    <div class="wrap">
-      <div class="contact-stack">
-        <div class="win cform rv">
-          <div class="cinfo-stack">
-            <div class="cinfo-row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 018.6 11.7A8.5 8.5 0 0112 21a9.6 9.6 0 01-3.4-.6L4 21.5l1-3.2A9 9 0 0112 3z"/><path d="M8.5 11.5h.01M12.5 11.5h.01M8 15c2 1 4 1 6 0"/></svg></span><div><h4>个人微信</h4><p>yysh_yolo_self13 · 备注"求职沟通"通过更快</p></div></div>
-            <div class="cinfo-row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.13.96.36 1.9.7 2.8a2 2 0 01-.45 2.1L8.1 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.45c.9.34 1.84.57 2.8.7A2 2 0 0122 16.9z"/></svg></span><div><h4>手机电话</h4><p>19382262605 · 工作日 9:00–21:00</p></div></div>
-            <div class="cinfo-row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M2 7l10 6L22 7"/></svg></span><div><h4>电子邮箱</h4><p>363344172@qq.com · 简历与项目文件随时可发</p></div></div>
-            <div class="cinfo-row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1116 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><h4>所在城市</h4><p>四川 · 成都市 · 成都本地优先，可远程</p></div></div>
-          </div>
-          <form id="contactForm" novalidate>
-            <div class="form-row">
-              <div class="field"><label for="f-name">您的姓名 / 职务 *</label><input id="f-name" name="name" type="text" placeholder="怎么称呼您" autocomplete="name" required></div>
-              <div class="field"><label for="f-company">企业 / 团队名称 *</label><input id="f-company" name="company" type="text" placeholder="您的公司或团队" autocomplete="organization" required></div>
-            </div>
-            <div class="form-row">
-              <div class="field"><label for="f-topic">意向岗位</label>
-                <select id="f-topic" name="topic">
-                  <option value="">请选择</option>
-                  <option>VR 开发实习生</option>
-                  <option>Unity 游戏客户端实习生</option>
-                  <option>UE 虚幻引擎实习生</option>
-                  <option>数字孪生 / 三维可视化实习生</option>
-                  <option>其他岗位</option>
-                </select>
-              </div>
-              <div class="field"><label for="f-contact">联系方式</label><input id="f-contact" name="contact" type="text" placeholder="电话 / 微信 / 邮箱均可"></div>
-            </div>
-            <div class="field"><label for="f-msg">留言详情 *</label><textarea id="f-msg" name="message" placeholder="简单介绍岗位内容、工作形式（到岗/远程）与您的期望" required></textarea></div>
-            <button class="btn btn-solid" type="submit" style="width:100%;margin-top:6px">发送实习沟通邀请<span class="arr">→</span></button>
-          </form>
-        </div>
+        <a class="btn btn-ghost" href="#/home#sec-works">看看我的作品<span class="arr">→</span></a>
+        <a class="btn btn-solid" href="#/home#sec-contact" style="margin-left:12px">联系我<span class="arr">→</span></a>
       </div>
     </div>
   </div>
@@ -912,23 +766,23 @@ ul{list-style:none}
       <nav class="foot-links" aria-label="页脚导航">
         <span class="grp">快速链接</span>
         <a href="#/home">首页</a>
-        <a href="#/works">作品集</a>
+        <a href="#/home#sec-works">作品集</a>
         <a href="#/about">关于我</a>
-        <a href="#/notes">学习手账</a>
-        <a href="#/contact">联系我</a>
+        <a href="#/home#sec-notes">学习手账</a>
+        <a href="#/home#sec-contact">联系我</a>
         <span class="grp">技能标签</span>
         <a href="#/about">Unity3D</a>
         <a href="#/about">C#</a>
         <a href="#/about">UE5</a>
         <a href="#/about">高斯泼溅</a>
         <a href="#/about">数字孪生</a>
-        <a href="#/works">微信小游戏</a>
+        <a href="#/home#sec-works">微信小游戏</a>
       </nav>
       <div class="foot-links" aria-label="联系方式">
         <span class="grp">联系方式</span>
         <a href="mailto:363344172@qq.com">邮箱：363344172@qq.com</a>
-        <a href="#/contact">微信：yysh_yolo_self13</a>
-        <a href="#/contact">成都 · 可远程 · 一周内到岗</a>
+        <a href="#/home#sec-contact">微信：yysh_yolo_self13</a>
+        <a href="#/home#sec-contact">成都 · 可远程 · 一周内到岗</a>
       </div>
     </div>
     <div class="foot-bottom">
@@ -953,21 +807,25 @@ ul{list-style:none}
   var MAIN_DESC = "贾雨婷，成都职业技术学院虚拟现实技术应用专业毕业生，求职 VR 开发 / Unity 客户端开发实习。";
 
   function parseHash(){
-    var h = location.hash || "#/home";
-    var seg = h.replace(/^#\/?/, "");
-    var known = ["home","works","about","notes","contact"];
-    return known.indexOf(seg) !== -1 ? seg : "home";
+    var h = (location.hash || "#/home").replace(/^#\/?/, "");
+    var parts = h.split("#");
+    var route = parts[0] || "home";
+    var anchor = parts[1] || "";
+    if(["home","about"].indexOf(route) === -1) route = "home";
+    return { route: route, anchor: anchor };
   }
 
-  function showView(name){
+  function showView(state){
+    var name = state.route, anchor = state.anchor;
     var active = null;
     views.forEach(function(v){
       var on = v.id === "view-" + name;
       v.classList.toggle("on", on);
       if(on) active = v;
     });
+    var navKey = anchor ? anchor.replace(/^sec-/, "") : name;
     navLinks.forEach(function(a){
-      a.classList.toggle("on", a.getAttribute("data-nav") === name);
+      a.classList.toggle("on", a.getAttribute("data-nav") === navKey);
     });
     if(active){
       var t = active.getAttribute("data-title");
@@ -976,9 +834,17 @@ ul{list-style:none}
       var m = document.querySelector('meta[name="description"]');
       if(m) m.setAttribute("content", d);
     }
-    window.scrollTo(0, 0);
     closeDrawer();
-    requestReveal();
+    if(anchor){
+      requestReveal();
+      var target = document.getElementById(anchor);
+      if(target){
+        setTimeout(function(){ target.scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
+      }
+    }else{
+      window.scrollTo(0, 0);
+      requestReveal();
+    }
   }
 
   window.addEventListener("hashchange", function(){ showView(parseHash()); });
@@ -1062,22 +928,6 @@ ul{list-style:none}
     document.getElementById("carNext").addEventListener("click", function(){ carGo(carIdx + 1); carRestart(); });
     if(!reduceMotion){ carTimer = setInterval(function(){ carGo(carIdx + 1); }, 5200); }
   }
-
-  /* ---- 作品筛选 ---- */
-  var fchips = document.querySelectorAll(".fchip");
-  var works = document.querySelectorAll("#workGrid .work");
-  fchips.forEach(function(chip){
-    chip.addEventListener("click", function(){
-      fchips.forEach(function(c){ c.classList.remove("on"); });
-      chip.classList.add("on");
-      var f = chip.getAttribute("data-filter");
-      works.forEach(function(w){
-        var show = (f === "all") || (w.getAttribute("data-cat") === f);
-        w.style.display = show ? "" : "none";
-        if(show && !w.classList.contains("in")){ w.classList.add("in"); }
-      });
-    });
-  });
 
   /* ---- 学习手账"阅读完整笔记" ---- */
   var toast = document.getElementById("toast");
