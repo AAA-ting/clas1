@@ -586,22 +586,22 @@ ul{list-style:none}
       </div>
       <div class="note-grid">
         <article class="win note rv">
-          <span class="tag">Unity C# 实践</span>
-          <h3>《从零搭建 Unity 角色有限状态机（FSM）》</h3>
-          <p>为什么不用 if-else 管理角色状态？手写 Idle/Run/Jump/Attack 状态机，顺带解决了动画打断与输入缓冲问题。</p>
-          <div class="meta"><span>2025.06</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+          <span class="tag">UE粒子系统</span>
+          <h3>火堆粒子制作</h3>
+          <p>用 Static Mesh Location 让粒子沿火柴堆网格体生成，再通过温度模块分离火焰与烟雾，调涡度让火苗缓缓飘动。</p>
+          <div class="meta"><span>UE Niagara</span><a class="more" href="docs/huodui.docx" target="_blank" rel="noopener">阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
         </article>
         <article class="win note rv">
-          <span class="tag">VR 交互设计</span>
-          <h3>《VR 展厅里的"手感"：传送、抓取与射线交互调优》</h3>
-          <p>XR Toolkit 的默认手感很"飘"。整理了传送区设置、抓取吸附阈值与射线反馈的实际调参记录。</p>
-          <div class="meta"><span>2025.04</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+          <span class="tag">UE粒子系统</span>
+          <h3>烟花粒子效果</h3>
+          <p>Spawn Rate 控制发射频率，圆锥速度与 Drag 阻力模拟火星炸开散射与减速，Ribbon 带状粒子做出烟花拖尾。</p>
+          <div class="meta"><span>UE Niagara</span><a class="more" href="docs/yanhua.docx" target="_blank" rel="noopener">阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
         </article>
         <article class="win note rv">
-          <span class="tag">三维重建</span>
-          <h3>《实景三维重建入门：从实拍到引擎漫游》</h3>
-          <p>用手机环绕拍摄训练出第一个三维重建场景，再转成引擎可用资源。记录采集路径规划与常见重建失败原因。</p>
-          <div class="meta"><span>2025.09</span><button class="more" type="button" data-note>阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+          <span class="tag">UE粒子系统</span>
+          <h3>炸弹烟雾粒子制作</h3>
+          <p>单次循环的爆炸效果，圆盘/圆环形状约束爆炸半径，配合高力度冲击与卷云状烟雾模拟真实爆炸。</p>
+          <div class="meta"><span>UE Niagara</span><a class="more" href="docs/zhadan.docx" target="_blank" rel="noopener">阅读完整笔记 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
         </article>
       </div>
     </div>
@@ -936,11 +936,6 @@ ul{list-style:none}
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 3200);
   }
-  document.querySelectorAll("[data-note]").forEach(function(btn){
-    btn.addEventListener("click", function(){
-      showToast("完整笔记整理中——面试时欢迎当面翻阅，也可联系我发送");
-    });
-  });
 
   /* ---- 联系表单 ---- */
   var form = document.getElementById("contactForm");
