@@ -44,8 +44,24 @@ ul{list-style:none}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
 ::selection{background:rgba(137,184,194,.35)}
 
-/* 背景装饰：极简风禁用 */
-.bg-scene{display:none}
+/* 背景装饰：晨雾——浅色柔光色晕 + 极淡网格 */
+.bg-scene{
+  display:block;position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(1100px 720px at 14% -10%, rgba(137,184,194,.20), transparent 62%),
+    radial-gradient(900px 640px at 92% -2%, rgba(74,95,122,.12), transparent 58%),
+    radial-gradient(1000px 820px at 50% 118%, rgba(137,184,194,.12), transparent 66%);
+}
+.bg-scene::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(26,29,36,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(26,29,36,.03) 1px,transparent 1px);
+  background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 85% 52% at 50% 0%,#000 18%,transparent 74%);
+  mask-image:radial-gradient(ellipse 85% 52% at 50% 0%,#000 18%,transparent 74%);
+}
+.bg-scene .blob{display:none}
 
 .wrap{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 20px}
 
