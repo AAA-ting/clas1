@@ -44,22 +44,30 @@ ul{list-style:none}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
 ::selection{background:rgba(137,184,194,.35)}
 
-/* 背景装饰：晨雾——浅色柔光色晕 + 极淡网格 */
+/* 背景装饰：蓝图制图风——明显色晕 + 点阵 + 描边圆环 */
 .bg-scene{
   display:block;position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(1100px 720px at 14% -10%, rgba(137,184,194,.20), transparent 62%),
-    radial-gradient(900px 640px at 92% -2%, rgba(74,95,122,.12), transparent 58%),
-    radial-gradient(1000px 820px at 50% 118%, rgba(137,184,194,.12), transparent 66%);
+    radial-gradient(1200px 820px at 18% -14%, rgba(137,184,194,.38), transparent 60%),
+    radial-gradient(1000px 700px at 96% 6%, rgba(74,95,122,.17), transparent 56%),
+    radial-gradient(1100px 900px at 50% 122%, rgba(137,184,194,.24), transparent 66%),
+    linear-gradient(180deg,#EBF0F4 0%,#F5F6F7 52%,#EFF3F6 100%);
 }
 .bg-scene::before{
   content:"";position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(26,29,36,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(26,29,36,.03) 1px,transparent 1px);
-  background-size:44px 44px;
-  -webkit-mask-image:radial-gradient(ellipse 85% 52% at 50% 0%,#000 18%,transparent 74%);
-  mask-image:radial-gradient(ellipse 85% 52% at 50% 0%,#000 18%,transparent 74%);
+  background-image:radial-gradient(rgba(74,95,122,.16) 1.2px,transparent 1.4px);
+  background-size:30px 30px;
+  -webkit-mask-image:radial-gradient(ellipse 90% 68% at 50% 0%,#000 30%,transparent 82%);
+  mask-image:radial-gradient(ellipse 90% 68% at 50% 0%,#000 30%,transparent 82%);
+}
+.bg-scene::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 84% 10%, transparent 116px, rgba(74,95,122,.25) 117px, rgba(74,95,122,.25) 118.5px, transparent 120px),
+    radial-gradient(circle at 84% 10%, transparent 176px, rgba(137,184,194,.55) 177px, rgba(137,184,194,.55) 178.5px, transparent 180px),
+    radial-gradient(circle at 84% 10%, transparent 246px, rgba(137,184,194,.30) 247px, rgba(137,184,194,.30) 248.5px, transparent 250px),
+    radial-gradient(circle at 7% 40%, transparent 66px, rgba(137,184,194,.5) 67px, rgba(137,184,194,.5) 68.5px, transparent 70px),
+    radial-gradient(circle at 13% 78%, transparent 96px, rgba(74,95,122,.20) 97px, rgba(74,95,122,.20) 98.5px, transparent 100px);
 }
 .bg-scene .blob{display:none}
 
