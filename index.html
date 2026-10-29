@@ -341,6 +341,7 @@ ul{list-style:none}
 .cinfo-row h4{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:1px}
 .cinfo-row p{font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.5}
 .cform{padding:28px 24px}
+.form-success{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.35);color:#0b7a5c;font-size:14px;font-weight:600;padding:12px 16px;border-radius:14px;margin-bottom:14px}
 .form-row{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
 .field label{display:block;font-size:13.5px;color:var(--text);margin-bottom:7px;font-weight:500}
 .field input,.field textarea,.field select{
@@ -976,9 +977,13 @@ ul{list-style:none}
     /* 已配置 Access Key：放行原生提交，由 Web3Forms 投递到邮箱 */
   });
 
-  /* ---- 提交成功回跳提示（FormSubmit _next 带回 sent=1）---- */
+  /* ---- 提交成功回跳提示（Web3Forms redirect 带回 sent=1）---- */
   if(location.search.indexOf("sent=1") !== -1){
     showToast("邀请已发送到我的邮箱，我会在 24 小时内回复您！");
+    var bar = document.createElement("div");
+    bar.className = "form-success";
+    bar.textContent = "✓ 邀请已发送到我的邮箱（363344172@qq.com），我会在 24 小时内回复您！";
+    form.parentNode.insertBefore(bar, form);
     history.replaceState(null, "", location.pathname + location.hash);
   }
 
